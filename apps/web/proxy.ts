@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   let supabaseResponse = NextResponse.next({ request: req })
 
   const supabase = createServerClient(
@@ -24,7 +24,6 @@ export async function middleware(req: NextRequest) {
     }
   )
 
-  // Refresh session — required for Server Components to read the updated session
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -68,7 +67,6 @@ export async function middleware(req: NextRequest) {
       return supabaseResponse
     }
 
-    // Check staff table — regular customers must not access admin
     const { data: staff } = await supabase
       .from('staff')
       .select('role, is_active')
@@ -84,7 +82,6 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/admin-dashboard', req.url))
     }
 
-    // Pass staff role to server components via request header
     const requestHeaders = new Headers(req.headers)
     requestHeaders.set('x-staff-role', staff.role as string)
 
