@@ -94,7 +94,7 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
     label: 'Content',
     items: [
       {
-        href: '/products',
+        href: '/admin-products',
         label: 'Products',
         icon: (
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
