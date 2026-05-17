@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import type { Season, TimeOfDay } from '@/lib/seasonal'
-import AuraLayer from './AuraLayer'
+// import AuraLayer from './AuraLayer'
 import ParticleCanvas from './ParticleCanvas'
 
 interface LoadingScreenProps {
@@ -73,7 +73,6 @@ export default function LoadingScreen({
   secondary,
 }: LoadingScreenProps) {
   const [loadState, setLoadState] = useState<LoadState>('animating')
-  const [auraIntensity, setAuraIntensity] = useState(0)
   const [logoGlowing, setLogoGlowing] = useState(false)
   const prefersReduced = useReducedMotion()
 
@@ -102,13 +101,6 @@ export default function LoadingScreen({
       onCompleteRef.current()
     }, 500)
   }, [])
-
-  // Aura intensity ramp
-  useEffect(() => {
-    if (prefersReduced) return
-    const ramp = setTimeout(() => setAuraIntensity(1), 50)
-    return () => { clearTimeout(ramp) }
-  }, [prefersReduced])
 
   // Glow pulse at 2000ms
   useEffect(() => {
@@ -223,12 +215,12 @@ export default function LoadingScreen({
             secondary={secondary}
           />
 
-          {/* Layer 2: Aura */}
-          <AuraLayer
+          {/* Layer 2: Aura — temporarily disabled */}
+          {/* <AuraLayer
             season={season}
             mode="loading"
             intensityTarget={auraIntensity}
-          />
+          /> */}
 
           {/* Layer 3: Logo */}
           <div
