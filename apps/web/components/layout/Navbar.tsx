@@ -206,8 +206,9 @@ export default function Navbar() {
       if (!user) return
       const name = user.user_metadata?.full_name as string | undefined
       setUserInitial((name ?? user.email ?? 'U')[0].toUpperCase())
-      const { data: staffRow } = await supabase.from('staff').select('role').eq('id', user.id).eq('is_active', true).single()
-      setIsStaff(!!staffRow)
+      const res = await fetch('/api/auth/check-role')
+      const { role } = await res.json() as { role: string | null }
+      setIsStaff(!!role)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
