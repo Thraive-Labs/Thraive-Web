@@ -57,15 +57,11 @@ export default function LoginPage() {
       return
     }
 
-    // Check if user is staff — redirect to admin portal if so
-    const { data: staffRow } = await supabase
-      .from('staff')
-      .select('role')
-      .eq('id', authData.user.id)
-      .eq('is_active', true)
-      .single()
+    // Check if user is staff via service-role API route (bypasses RLS)
+    const res = await fetch('/api/auth/check-role')
+    const { role } = await res.json() as { role: string | null }
 
-    router.push(staffRow ? '/admin-dashboard' : '/dashboard')
+    router.push(role ? '/admin-dashboard' : '/dashboard')
     router.refresh()
   }
 
