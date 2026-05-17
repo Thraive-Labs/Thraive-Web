@@ -10,8 +10,8 @@
 
 INSERT INTO public.staff (id, full_name, role, is_active)
 VALUES (
-  '<PASTE-USER-UUID-HERE>',   -- replace with the UUID from Supabase Auth
-  'Super Admin',              -- change to the real name
+  '41745f61-c61b-4564-b037-32bffd403e45',   -- replace with the UUID from Supabase Auth
+  'Udeesha Kularathne',              -- change to the real name
   'superadmin',
   true
 )
