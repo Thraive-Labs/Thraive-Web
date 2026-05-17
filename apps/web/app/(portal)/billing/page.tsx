@@ -72,7 +72,7 @@ export default async function BillingPage() {
       </div>
 
       {/* Content */}
-      <div style={{ padding: 32, maxWidth: 900 }}>
+      <div style={{ padding: 32 }}>
         {/* Manage billing button */}
         <div style={{ marginBottom: 32 }}>
           <ManageBillingButton />

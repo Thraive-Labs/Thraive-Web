@@ -11,7 +11,7 @@ const HEADLINE_WORDS = [
   { text: 'business,', accent: false },
   { text: 'built', accent: false },
   { text: 'to', accent: false },
-  { text: 'thrive.', accent: true },
+  { text: 'thraive.', accent: true },
 ]
 
 function ScrollIndicator() {

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import LogoMark from '@/components/ui/LogoMark'
 import { useTheme } from '@/contexts/theme-context'
 import { PRODUCTS } from '@/lib/products'
+import { createClient } from '@/lib/supabase/client'
 import {
   WildCafeIcon, PharmacyIcon, SmartPOSIcon,
   RouteFlowIcon, AutoServIcon, SonaraIcon,
@@ -164,6 +165,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [productsOpen, setProductsOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [userInitial, setUserInitial] = useState<string | null>(null)
+  const [isStaff, setIsStaff] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -195,6 +198,23 @@ export default function Navbar() {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
+
+  // Auth state
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return
+      const name = user.user_metadata?.full_name as string | undefined
+      setUserInitial((name ?? user.email ?? 'U')[0].toUpperCase())
+      const { data: staffRow } = await supabase.from('staff').select('role').eq('id', user.id).eq('is_active', true).single()
+      setIsStaff(!!staffRow)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) { setUserInitial(null); setIsStaff(false) }
+    })
+    return () => subscription.unsubscribe()
+  }, [])
 
   return (
     <>
@@ -374,60 +394,96 @@ export default function Navbar() {
               {mode === 'dark' ? <SunIcon /> : <MoonIcon />}
             </button>
 
-            {/* Sign in + Get started — hidden on small mobile */}
+            {/* Sign in / Profile — hidden on small mobile */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }} className="hidden sm:flex">
-              <a
-                href="/login"
-                style={{
-                  padding: '6px 12px',
-                  fontSize: 14,
-                  fontWeight: 500,
-                  color: 'var(--text-secondary)',
-                  textDecoration: 'none',
-                  borderRadius: 'var(--radius-md)',
-                  transition: 'color 150ms, background 150ms',
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.color = 'var(--text-primary)'
-                  el.style.background = 'var(--bg-subtle)'
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.color = 'var(--text-secondary)'
-                  el.style.background = ''
-                }}
-              >
-                Sign in
-              </a>
-              <Link
-                href="/products"
-                style={{
-                  padding: '6px 14px',
-                  height: 36,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--season-btn-bg)',
-                  color: 'white',
-                  fontSize: 14,
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                  transition: 'background 150ms, transform 150ms',
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.background = 'var(--season-btn-hover)'
-                  el.style.transform = 'translateY(-1px)'
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.background = 'var(--season-btn-bg)'
-                  el.style.transform = ''
-                }}
-              >
-                Get started
-              </Link>
+              {userInitial ? (
+                <Link
+                  href={isStaff ? '/admin-dashboard' : '/dashboard'}
+                  title={isStaff ? 'Go to admin portal' : 'Go to dashboard'}
+                  style={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: '50%',
+                    background: 'var(--season-btn-bg)',
+                    color: 'white',
+                    fontSize: 13,
+                    fontWeight: 700,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textDecoration: 'none',
+                    transition: 'background 150ms, transform 150ms',
+                    flexShrink: 0,
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLElement
+                    el.style.background = 'var(--season-btn-hover)'
+                    el.style.transform = 'translateY(-1px)'
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLElement
+                    el.style.background = 'var(--season-btn-bg)'
+                    el.style.transform = ''
+                  }}
+                >
+                  {userInitial}
+                </Link>
+              ) : (
+                <>
+                  <a
+                    href="/login"
+                    style={{
+                      padding: '6px 12px',
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: 'var(--text-secondary)',
+                      textDecoration: 'none',
+                      borderRadius: 'var(--radius-md)',
+                      transition: 'color 150ms, background 150ms',
+                    }}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget as HTMLElement
+                      el.style.color = 'var(--text-primary)'
+                      el.style.background = 'var(--bg-subtle)'
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget as HTMLElement
+                      el.style.color = 'var(--text-secondary)'
+                      el.style.background = ''
+                    }}
+                  >
+                    Sign in
+                  </a>
+                  <Link
+                    href="/products"
+                    style={{
+                      padding: '6px 14px',
+                      height: 36,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      borderRadius: 'var(--radius-md)',
+                      background: 'var(--season-btn-bg)',
+                      color: 'white',
+                      fontSize: 14,
+                      fontWeight: 500,
+                      textDecoration: 'none',
+                      transition: 'background 150ms, transform 150ms',
+                    }}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget as HTMLElement
+                      el.style.background = 'var(--season-btn-hover)'
+                      el.style.transform = 'translateY(-1px)'
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget as HTMLElement
+                      el.style.background = 'var(--season-btn-bg)'
+                      el.style.transform = ''
+                    }}
+                  >
+                    Get started
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Hamburger — mobile only */}

@@ -255,7 +255,7 @@ function AccordionItem({ question, answer }: { question: string; answer: string 
 
 export default function DownloadsClient({ entries }: { entries: VersionEntry[] }) {
   return (
-    <div style={{ padding: 32, maxWidth: 900 }}>
+    <div style={{ padding: 32 }}>
       <p style={{ fontSize: 15, color: 'var(--text-secondary)', marginBottom: 32 }}>
         Download the latest versions of your licensed software below. Always use the latest version
         for the most recent bug fixes and improvements.

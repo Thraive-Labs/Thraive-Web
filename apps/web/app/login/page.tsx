@@ -49,7 +49,7 @@ export default function LoginPage() {
     setError(null)
 
     const supabase = createClient()
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
     if (authError) {
       setLoading(false)
@@ -57,7 +57,15 @@ export default function LoginPage() {
       return
     }
 
-    router.push('/dashboard')
+    // Check if user is staff — redirect to admin portal if so
+    const { data: staffRow } = await supabase
+      .from('staff')
+      .select('role')
+      .eq('id', authData.user.id)
+      .eq('is_active', true)
+      .single()
+
+    router.push(staffRow ? '/admin-dashboard' : '/dashboard')
     router.refresh()
   }
 

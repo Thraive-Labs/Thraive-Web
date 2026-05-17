@@ -1,9 +1,9 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import Container from '@/components/ui/Container'
 import SectionLabel from '@/components/ui/SectionLabel'
-import Button from '@/components/ui/Button'
 
 const STEPS = [
   {
@@ -165,12 +165,38 @@ export default function HowItWorksSection() {
           transition={{ duration: 0.5, delay: 0.4 }}
           style={{ textAlign: 'center', marginTop: 48 }}
         >
-          <Button href="/products" variant="primary" size="lg">
+          <Link
+            href="/products"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              height: 48,
+              padding: '0 24px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--season-btn-bg)',
+              color: 'white',
+              fontSize: 15,
+              fontWeight: 600,
+              textDecoration: 'none',
+              transition: 'background 150ms, transform 150ms',
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement
+              el.style.background = 'var(--season-btn-hover)'
+              el.style.transform = 'translateY(-1px)'
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement
+              el.style.background = 'var(--season-btn-bg)'
+              el.style.transform = ''
+            }}
+          >
             Get started
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </Button>
+          </Link>
         </motion.div>
       </Container>
     </section>

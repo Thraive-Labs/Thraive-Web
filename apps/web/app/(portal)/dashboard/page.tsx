@@ -69,7 +69,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Content */}
-      <div style={{ padding: 32, maxWidth: 900 }}>
+      <div style={{ padding: 32 }}>
         <p
           style={{
             fontSize: 'clamp(22px, 3vw, 28px)',

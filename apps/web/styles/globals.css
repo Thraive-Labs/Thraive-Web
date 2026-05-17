@@ -140,7 +140,7 @@ body {
   border-radius: var(--radius-md);
   text-decoration: none;
 }
-.skip-to-main:focus {
+.skip-to-main:focus-visible {
   left: 8px;
 }
 

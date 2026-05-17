@@ -173,7 +173,7 @@ export default function SettingsClient({ fullName, email, memberSince, renewalRe
         <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{dateStr}</span>
       </div>
 
-      <div style={{ padding: 32, maxWidth: 720 }}>
+      <div style={{ padding: 32 }}>
         {/* Profile */}
         <p style={SECTION_LABEL}>Profile</p>
         <GlassCard style={{ padding: 0, overflow: 'hidden', marginBottom: 32 }}>

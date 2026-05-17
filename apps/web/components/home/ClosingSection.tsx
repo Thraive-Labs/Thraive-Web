@@ -65,7 +65,7 @@ export default function ClosingSection() {
                 fontSize: 15,
                 fontWeight: 600,
                 textDecoration: 'none',
-                transition: 'opacity 150ms, transform 150ms',
+                transition: 'background 150ms, transform 150ms',
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLElement
