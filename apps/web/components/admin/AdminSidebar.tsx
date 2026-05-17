@@ -127,7 +127,7 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
             <path d="M12 6v4M14 8h-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         ),
-        roles: ['superadmin'],
+        roles: ['superadmin', 'admin'],
       },
       {
         href: '/audit-log',

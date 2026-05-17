@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { Suspense, useState, type FormEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const accessDenied = searchParams.get('error') === 'access_denied'
@@ -169,5 +169,13 @@ export default function AdminLoginPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense>
+      <AdminLoginForm />
+    </Suspense>
   )
 }

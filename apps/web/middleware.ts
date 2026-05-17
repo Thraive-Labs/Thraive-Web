@@ -44,6 +44,19 @@ export async function middleware(req: NextRequest) {
     if (user && isAuthPath && !req.nextUrl.pathname.startsWith('/auth/')) {
       return NextResponse.redirect(new URL('/dashboard', req.url))
     }
+
+    // Block suspended consumers
+    if (user && !isAuthPath) {
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('is_blocked')
+        .eq('id', user.id)
+        .single()
+
+      if (profile?.is_blocked) {
+        return NextResponse.redirect(new URL('/blocked', req.url))
+      }
+    }
   }
 
   // Admin portal: admin.* subdomain

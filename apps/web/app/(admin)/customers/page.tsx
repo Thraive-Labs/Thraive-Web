@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { BlockToggle, CreateConsumerButton } from './CustomersActionBar'
 
 const PAGE_SIZE = 20
 
@@ -22,7 +23,7 @@ export default async function CustomersPage({
 
   let query = supabase
     .from('user_profiles')
-    .select('id, full_name, created_at', { count: 'exact' })
+    .select('id, full_name, created_at, is_blocked', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to)
 
@@ -56,40 +57,43 @@ export default async function CustomersPage({
       </div>
 
       <div style={{ padding: 32 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 12 }}>
-          <form method="GET" style={{ display: 'flex', gap: 10 }}>
-            <input
-              name="q"
-              defaultValue={q}
-              placeholder="Search by name..."
-              style={{
-                height: 36,
-                padding: '0 12px',
-                borderRadius: 8,
-                border: '1px solid rgba(255,255,255,0.1)',
-                background: '#111113',
-                color: '#F9FAFB',
-                fontSize: 14,
-                width: 220,
-              }}
-            />
-            <button
-              type="submit"
-              style={{
-                height: 36,
-                padding: '0 16px',
-                borderRadius: 8,
-                background: '#6366F1',
-                color: 'white',
-                fontSize: 13,
-                fontWeight: 600,
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              Search
-            </button>
-          </form>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 12, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <form method="GET" style={{ display: 'flex', gap: 10 }}>
+              <input
+                name="q"
+                defaultValue={q}
+                placeholder="Search by name..."
+                style={{
+                  height: 36,
+                  padding: '0 12px',
+                  borderRadius: 8,
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  background: '#111113',
+                  color: '#F9FAFB',
+                  fontSize: 14,
+                  width: 220,
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  height: 36,
+                  padding: '0 16px',
+                  borderRadius: 8,
+                  background: '#374151',
+                  color: 'white',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Search
+              </button>
+            </form>
+            <CreateConsumerButton />
+          </div>
           <p style={{ fontSize: 13, color: '#4B5563' }}>{count ?? 0} total customers</p>
         </div>
 
@@ -104,7 +108,7 @@ export default async function CustomersPage({
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
             <thead>
               <tr>
-                {['Name', 'Joined', 'Actions'].map((h) => (
+                {['Name', 'Status', 'Joined', 'Actions'].map((h) => (
                   <th
                     key={h}
                     style={{
@@ -130,10 +134,21 @@ export default async function CustomersPage({
                     <td style={{ padding: '12px 20px', color: '#E5E7EB', fontWeight: 500 }}>
                       {(p.full_name as string) || 'Unknown'}
                     </td>
+                    <td style={{ padding: '12px 20px' }}>
+                      {p.is_blocked ? (
+                        <span style={{ fontSize: 11, fontWeight: 700, color: '#EF4444', background: 'rgba(239,68,68,0.1)', padding: '2px 8px', borderRadius: 20 }}>
+                          Blocked
+                        </span>
+                      ) : (
+                        <span style={{ fontSize: 11, fontWeight: 700, color: '#10B981', background: 'rgba(16,185,129,0.1)', padding: '2px 8px', borderRadius: 20 }}>
+                          Active
+                        </span>
+                      )}
+                    </td>
                     <td style={{ padding: '12px 20px', color: '#6B7280', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
                       {new Date(p.created_at as string).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </td>
-                    <td style={{ padding: '12px 20px' }}>
+                    <td style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 4 }}>
                       <Link
                         href={`/customers/${p.id as string}`}
                         style={{
@@ -148,12 +163,17 @@ export default async function CustomersPage({
                       >
                         View
                       </Link>
+                      <BlockToggle
+                        customerId={p.id as string}
+                        customerName={(p.full_name as string) || 'Unknown'}
+                        isBlocked={p.is_blocked as boolean ?? false}
+                      />
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={3} style={{ padding: '24px 20px', color: '#4B5563', textAlign: 'center' }}>
+                  <td colSpan={4} style={{ padding: '24px 20px', color: '#4B5563', textAlign: 'center' }}>
                     No customers found.
                   </td>
                 </tr>

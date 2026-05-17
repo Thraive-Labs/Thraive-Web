@@ -2,7 +2,9 @@ import Stripe from 'stripe'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!)
+}
 
 function lookupPriceId(product: string, plan: string, billingType: string): string | undefined {
   // e.g. STRIPE_WILDCAFE_STARTER_MONTHLY_PRICE_ID
@@ -49,6 +51,8 @@ export async function POST(req: Request) {
     .select('stripe_customer_id')
     .eq('id', user.id)
     .single()
+
+  const stripe = getStripe()
 
   if (profile?.stripe_customer_id) {
     stripeCustomerId = profile.stripe_customer_id as string

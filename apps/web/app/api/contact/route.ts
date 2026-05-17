@@ -1,7 +1,9 @@
 import { Resend } from 'resend'
 import { NextResponse } from 'next/server'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 const SUBJECT_LABELS: Record<string, string> = {
   sales: 'Sales enquiry',
@@ -27,7 +29,7 @@ export async function POST(req: Request) {
   const subjectLabel = SUBJECT_LABELS[subject] ?? subject
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.RESEND_FROM_EMAIL ?? 'noreply@thraive.com',
       to: 'support@thraive.com',
       replyTo: email,

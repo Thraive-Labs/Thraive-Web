@@ -1,6 +1,8 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 const FROM = process.env.RESEND_FROM_EMAIL ?? 'noreply@thraive.com'
 
@@ -26,7 +28,7 @@ export async function sendLicenseEmail(params: LicenseEmailParams) {
   const { to, product, plan, licenseKey, downloadUrl, portalUrl } = params
   const productName = PRODUCT_NAMES[product] ?? product
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `Your ${productName} license is ready`,
@@ -90,7 +92,7 @@ export async function sendPaymentFailedEmail(params: PaymentFailedParams) {
   const { to, product, gracePeriodEnd, portalUrl } = params
   const productName = PRODUCT_NAMES[product] ?? product
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `Action needed: payment failed for ${productName}`,
@@ -119,7 +121,7 @@ export async function sendRenewalReminderEmail(params: RenewalReminderParams) {
   const { to, product, renewalDate, amount, portalUrl } = params
   const productName = PRODUCT_NAMES[product] ?? product
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `Your ${productName} subscription renews in 7 days`,

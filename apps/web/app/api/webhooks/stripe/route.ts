@@ -3,13 +3,18 @@ import { createClient } from '@supabase/supabase-js'
 import { generateLicenseKey } from '@/lib/license'
 import { sendLicenseEmail, sendPaymentFailedEmail } from '@/lib/resend'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+// Lazy-initialized to avoid build-time env var requirement
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!)
+}
 
 // Service role — webhooks run outside user session
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 // Stripe v22: period end is on subscription items, not the subscription itself
 function getSubPeriodEnd(sub: Stripe.Subscription): Date {
@@ -32,6 +37,7 @@ function getInvoiceSubId(invoice: Stripe.Invoice): string | null {
 export async function POST(req: Request) {
   const body = await req.text()
   const sig = req.headers.get('stripe-signature')!
+  const stripe = getStripe()
 
   let event: Stripe.Event
   try {
@@ -66,6 +72,7 @@ export async function POST(req: Request) {
 }
 
 async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
+  const supabase = getSupabase()
   const { supabase_user_id, product, plan, billing_type } = session.metadata!
 
   const licenseKey = generateLicenseKey(product)
@@ -74,6 +81,7 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   let stripeSubId: string | null = null
 
   if (billing_type === 'subscription' && session.subscription) {
+    const stripe = getStripe()
     const sub = await stripe.subscriptions.retrieve(
       typeof session.subscription === 'string' ? session.subscription : session.subscription.id
     )
@@ -126,10 +134,11 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 }
 
 async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
+  const supabase = getSupabase()
   const subId = getInvoiceSubId(invoice)
   if (!subId) return
 
-  const sub = await stripe.subscriptions.retrieve(subId)
+  const sub = await getStripe().subscriptions.retrieve(subId)
   const grace = getSubPeriodEnd(sub)
 
   const { data: license } = await supabase
@@ -157,6 +166,7 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
 }
 
 async function handlePaymentFailed(invoice: Stripe.Invoice) {
+  const supabase = getSupabase()
   const subId = getInvoiceSubId(invoice)
   if (!subId) return
 
@@ -201,6 +211,7 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
 }
 
 async function handleSubscriptionCancelled(subscription: Stripe.Subscription) {
+  const supabase = getSupabase()
   const { data: license } = await supabase
     .from('licenses')
     .select('id')
@@ -221,6 +232,7 @@ async function handleSubscriptionCancelled(subscription: Stripe.Subscription) {
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+  const supabase = getSupabase()
   const { data: license } = await supabase
     .from('licenses')
     .select('id')
