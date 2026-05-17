@@ -167,6 +167,20 @@ function AdminLoginForm() {
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
+
+        <a
+          href="/"
+          style={{
+            display: 'block',
+            textAlign: 'center',
+            marginTop: 20,
+            fontSize: 13,
+            color: '#4B5563',
+            textDecoration: 'none',
+          }}
+        >
+          &larr; Back to homepage
+        </a>
       </div>
     </div>
   )
