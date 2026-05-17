@@ -1,0 +1,32 @@
+[data-season="autumn"] {
+  --season-ambient:        #FB923C;
+  --season-ambient-dim:    #F97316;
+  --season-glow:           rgba(251, 146, 60, 0.12);
+  --season-glow-soft:      rgba(251, 146, 60, 0.05);
+  --season-bg-tint:        rgba(251, 146, 60, 0.04);
+  --season-card-border:    rgba(251, 146, 60, 0.2);
+  --season-accent:         #EA580C;
+  --season-btn-bg:         #C2410C;  /* orange-700 — 5.2:1 vs white, WCAG AA */
+  --season-btn-hover:      #9A3412;  /* orange-800 */
+  --particle-primary:      #FB923C;
+  --particle-secondary:    #B45309;
+  --particle-tertiary:     #D97706;
+  --particle-rain:         rgba(148, 163, 184, 0.4);
+  --particle-glow:         rgba(251, 146, 60, 0.2);
+  --accumulation-color:    #FB923C;
+  --accumulation-glow:     rgba(251, 146, 60, 0.2);
+  --aura-color-1:          #FB923C;
+  --aura-color-2:          #FDE68A;
+  --aura-color-3:          #B45309;
+}
+
+[data-mode="light"][data-season="autumn"] {
+  --particle-primary:      #C2410C;
+  --particle-secondary:    #78350F;
+  --particle-tertiary:     #92400E;
+  --particle-glow:         rgba(194, 65, 12, 0.2);
+  --accumulation-color:    #EA580C;
+  --accumulation-glow:     rgba(194, 65, 12, 0.15);
+  --season-glow:           rgba(194, 65, 12, 0.1);
+  --season-glow-soft:      rgba(194, 65, 12, 0.06);
+}

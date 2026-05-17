@@ -1,0 +1,29 @@
+[data-season="winter"] {
+  --season-ambient:        #BAE6FD;
+  --season-ambient-dim:    #7DD3FC;
+  --season-glow:           rgba(186, 230, 253, 0.12);
+  --season-glow-soft:      rgba(186, 230, 253, 0.05);
+  --season-bg-tint:        rgba(186, 230, 253, 0.04);
+  --season-card-border:    rgba(186, 230, 253, 0.15);
+  --season-accent:         #0EA5E9;
+  --season-btn-bg:         #0284C7;  /* sky-600 — 4.6:1 vs white, WCAG AA */
+  --season-btn-hover:      #0369A1;  /* sky-700 */
+  --particle-primary:      #E0F2FE;
+  --particle-secondary:    #BAE6FD;
+  --particle-glow:         rgba(224, 242, 254, 0.4);
+  --accumulation-color:    #E0F2FE;
+  --accumulation-glow:     rgba(224, 242, 254, 0.3);
+  --aura-color-1:          #BAE6FD;
+  --aura-color-2:          #7DD3FC;
+  --aura-color-3:          #E0F2FE;
+}
+
+[data-mode="light"][data-season="winter"] {
+  --particle-primary:      #2563EB;
+  --particle-secondary:    #1D4ED8;
+  --particle-glow:         rgba(37, 99, 235, 0.25);
+  --accumulation-color:    #60A5FA;
+  --accumulation-glow:     rgba(59, 130, 246, 0.2);
+  --season-glow:           rgba(37, 99, 235, 0.1);
+  --season-glow-soft:      rgba(59, 130, 246, 0.06);
+}

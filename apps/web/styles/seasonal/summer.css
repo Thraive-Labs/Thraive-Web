@@ -1,0 +1,31 @@
+[data-season="summer"] {
+  --season-ambient:        #FDE68A;
+  --season-ambient-dim:    #FCD34D;
+  --season-glow:           rgba(253, 230, 138, 0.12);
+  --season-glow-soft:      rgba(253, 230, 138, 0.05);
+  --season-bg-tint:        rgba(253, 230, 138, 0.03);
+  --season-card-border:    rgba(253, 230, 138, 0.2);
+  --season-accent:         #F59E0B;
+  --season-btn-bg:         #B45309;  /* amber-700 — 4.8:1 vs white, WCAG AA */
+  --season-btn-hover:      #92400E;  /* amber-800 */
+  --particle-primary:      #FDE68A;
+  --particle-secondary:    #FCD34D;
+  --particle-glow:         rgba(253, 230, 138, 0.5);
+  --accumulation-color:    #FDE68A;
+  --aura-color-1:          #FDE68A;
+  --aura-color-2:          #FCD34D;
+  --aura-color-3:          #FEF3C7;
+  --firefly-color:         #86EFAC;
+  --firefly-glow:          rgba(134, 239, 172, 0.6);
+}
+
+[data-mode="light"][data-season="summer"] {
+  --particle-primary:      #B45309;
+  --particle-secondary:    #92400E;
+  --particle-glow:         rgba(180, 83, 9, 0.35);
+  --accumulation-color:    #FCD34D;
+  --season-glow:           rgba(180, 83, 9, 0.08);
+  --season-glow-soft:      rgba(180, 83, 9, 0.05);
+  --firefly-color:         #D97706;
+  --firefly-glow:          rgba(217, 119, 6, 0.5);
+}
