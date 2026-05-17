@@ -29,20 +29,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         router.push('/admin-login')
         return
       }
-      const { data: staff } = await supabase
-        .from('staff')
-        .select('full_name, role, is_active')
-        .eq('id', user.id)
-        .single()
 
-      if (!staff || !staff.is_active) {
+      // Use service-role API to bypass RLS on staff table
+      const res = await fetch('/api/admin/me')
+      if (!res.ok) {
         await supabase.auth.signOut()
         router.push('/admin-login?error=access_denied')
         return
       }
+      const { full_name, role } = await res.json() as { full_name: string; role: string }
 
-      setStaffName((staff.full_name as string) || user.email || 'Staff')
-      setStaffRole(staff.role as string)
+      setStaffName(full_name || user.email || 'Staff')
+      setStaffRole(role)
       setReady(true)
     })
   }, [router])
