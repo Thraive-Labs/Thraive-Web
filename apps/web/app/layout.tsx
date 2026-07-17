@@ -42,7 +42,9 @@ export const metadata: Metadata = {
   },
 }
 
-const THEME_SCRIPT = `try{var s=localStorage.getItem('theme');var m=s==='dark'||s==='light'?s:window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-mode',m);}catch(e){document.documentElement.setAttribute('data-mode','light');}`
+// Light is the default regardless of OS preference — only an explicit stored
+// choice (from the Navbar/Footer toggle) should ever produce dark mode.
+const THEME_SCRIPT = `try{var s=localStorage.getItem('theme');var m=s==='dark'||s==='light'?s:'light';document.documentElement.setAttribute('data-mode',m);}catch(e){document.documentElement.setAttribute('data-mode','light');}`
 
 // Seasonal FX defaults to OFF (Editorial Warmth luxury palette) while the redesign
 // is being evaluated in demo mode. Strips the server-rendered season attributes

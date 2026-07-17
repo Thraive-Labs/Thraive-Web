@@ -4,7 +4,18 @@
 
 ## Current State
 
-Marketing site redesigned to "Editorial Warmth" — see Phase 9 below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+Marketing site redesigned to "Editorial Warmth" — see Phase 9 and the Phase 9b feedback pass below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+
+## Phase 9b — Redesign feedback pass (2026-07-18)
+
+First-round feedback: warmth should come from photography/humans, not brown UI chrome; the palette read as too plain; hero needed more visual/technical presence; the Problem section's two columns didn't match in height. Response:
+
+- **Palette rebuilt blue/black/white** (`styles/globals.css`, `lib/luxuryPalette.ts`): white light-mode background, true near-black text, electric blue (`#2455E8`) signature accent — replaces the terracotta/cream pass entirely. Photography keeps its natural warm tones (no more sepia grade in `EditorialImage.tsx`) — warmth now comes purely from the photo content, not the chrome.
+- **Light theme is the true default** — `THEME_SCRIPT` and `ThemeProvider` no longer check `prefers-color-scheme`; only an explicit toggle produces dark mode.
+- **Hero redesigned**: blueprint grid backdrop, a floating glassmorphic "Running offline · synced" status chip overlapping the photo, slight photo rotation + mouse-parallax (desktop, respects reduced motion).
+- **Problem section rebuilt**: was two stacked blocks (photo, then a full before/after card) causing a large height mismatch with the left column. Now one layered composition — photo as full-column backdrop, a condensed glass comparison panel (paired before→after rows) floating over its lower half.
+
+Build/typecheck pass; verified in both light and dark mode via Playwright.
 
 ## Phase 9 — Editorial Warmth Redesign (2026-07-18)
 

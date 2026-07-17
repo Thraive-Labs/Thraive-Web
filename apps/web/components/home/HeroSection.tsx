@@ -1,12 +1,80 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
 import { useLoading } from '@/contexts/loading-context'
 import SeasonAccentWord from './SeasonAccentWord'
 import EditorialImage from '@/components/ui/EditorialImage'
 import { EDITORIAL_IMAGES } from '@/lib/editorialImages'
+
+// Subtle blueprint grid — the "precise/technical" cue behind the hero,
+// faded toward the edges so it reads as texture, not a pattern.
+function GridBackdrop() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 0,
+        backgroundImage:
+          'linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)',
+        backgroundSize: '64px 64px',
+        opacity: 0.5,
+        maskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 40%, transparent 100%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 40%, transparent 100%)',
+      }}
+    />
+  )
+}
+
+// Floating glass chip that overlaps the hero photo's corner — a small,
+// tasteful technical/craft flourish (live-feeling status, not decorative).
+function StatusChip() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.5, delay: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
+      style={{
+        position: 'absolute',
+        left: -20,
+        bottom: -20,
+        zIndex: 2,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '12px 16px',
+        borderRadius: 'var(--radius-lg)',
+        background: 'var(--bg-glass)',
+        backdropFilter: 'var(--glass-blur)',
+        WebkitBackdropFilter: 'var(--glass-blur)',
+        border: 'var(--glass-border)',
+        boxShadow: '0 16px 40px -12px rgba(6,9,15,0.35)',
+      }}
+    >
+      <div
+        style={{
+          width: 8,
+          height: 8,
+          borderRadius: '50%',
+          background: 'var(--color-success)',
+          animation: 'soft-pulse 1.8s ease-in-out infinite',
+          flexShrink: 0,
+        }}
+      />
+      <div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+          Running offline
+        </div>
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+          6 products &middot; synced
+        </div>
+      </div>
+    </motion.div>
+  )
+}
 
 const HEADLINE_WORDS = [
   { text: 'Your', accent: false },
@@ -60,6 +128,30 @@ function ScrollIndicator() {
 export default function HeroSection() {
   const { isLoaded } = useLoading()
   const [started, setStarted] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+  const prefersReduced = useReducedMotion()
+
+  // Subtle mouse-follow parallax on the hero photo — desktop only (no
+  // mousemove on touch), skipped entirely under prefers-reduced-motion.
+  const mvX = useMotionValue(0)
+  const mvY = useMotionValue(0)
+  const springX = useSpring(mvX, { stiffness: 80, damping: 20, mass: 0.6 })
+  const springY = useSpring(mvY, { stiffness: 80, damping: 20, mass: 0.6 })
+  const imageX = useTransform(springX, [-0.5, 0.5], [-10, 10])
+  const imageY = useTransform(springY, [-0.5, 0.5], [-8, 8])
+
+  useEffect(() => {
+    if (prefersReduced) return
+    const el = sectionRef.current
+    if (!el) return
+    function onMove(e: MouseEvent) {
+      const rect = el!.getBoundingClientRect()
+      mvX.set((e.clientX - rect.left) / rect.width - 0.5)
+      mvY.set((e.clientY - rect.top) / rect.height - 0.5)
+    }
+    el.addEventListener('mousemove', onMove)
+    return () => el.removeEventListener('mousemove', onMove)
+  }, [prefersReduced, mvX, mvY])
 
   useEffect(() => {
     if (isLoaded) {
@@ -87,6 +179,7 @@ export default function HeroSection() {
 
   return (
     <section
+      ref={sectionRef}
       style={{
         position: 'relative',
         minHeight: '100svh',
@@ -97,6 +190,8 @@ export default function HeroSection() {
       }}
       aria-labelledby="hero-heading"
     >
+      <GridBackdrop />
+
       {/* Background radial gradient */}
       {started && (
         <motion.div
@@ -290,9 +385,10 @@ export default function HeroSection() {
         {started && (
           <motion.div
             className="hero-split-image"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, rotate: 0 }}
+            animate={{ opacity: 1, y: 0, rotate: -1.5 }}
             transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+            style={{ position: 'relative', x: imageX, y: imageY }}
           >
             <EditorialImage
               src={EDITORIAL_IMAGES.homeHero.src}
@@ -301,6 +397,7 @@ export default function HeroSection() {
               priority
               sizes="(max-width: 900px) 90vw, 480px"
             />
+            <StatusChip />
           </motion.div>
         )}
       </div>

@@ -11,12 +11,15 @@ interface EditorialImageProps {
   radius?: string
   className?: string
   style?: React.CSSProperties
+  /** When true, skips the aspect-ratio box and fills the parent (position: absolute, inset: 0) — use for layered/backdrop compositions where the parent controls sizing. */
+  fill?: boolean
 }
 
-// Shared art-direction wrapper for every real photo on the site — a consistent
-// warm color grade, rounded frame, soft shadow, and grain so stock photography
-// today reads as one deliberate art direction rather than assorted stock images,
-// and real company photography drops in later with zero visual change.
+// Shared art-direction wrapper for every real photo on the site — a rounded
+// frame, soft shadow, and grain so stock photography today reads as one
+// deliberate art direction. The color grade is deliberately light-touch: the
+// UI chrome carries the blue/black/white precision, the photography carries
+// the human warmth as shot — we don't want to flatten that with a heavy grade.
 export default function EditorialImage({
   src,
   alt,
@@ -26,16 +29,18 @@ export default function EditorialImage({
   radius = 'var(--radius-lg)',
   className,
   style,
+  fill = false,
 }: EditorialImageProps) {
   return (
     <div
       className={className}
       style={{
-        position: 'relative',
-        aspectRatio,
+        position: fill ? 'absolute' : 'relative',
+        inset: fill ? 0 : undefined,
+        aspectRatio: fill ? undefined : aspectRatio,
         borderRadius: radius,
         overflow: 'hidden',
-        boxShadow: '0 24px 60px -20px rgba(22,19,15,0.35), 0 4px 16px rgba(22,19,15,0.12)',
+        boxShadow: fill ? undefined : '0 24px 60px -20px rgba(6,9,15,0.30), 0 4px 16px rgba(6,9,15,0.10)',
         ...style,
       }}
     >
@@ -47,18 +52,18 @@ export default function EditorialImage({
         sizes={sizes}
         style={{
           objectFit: 'cover',
-          filter: 'sepia(8%) saturate(108%) contrast(101%) brightness(101%)',
+          filter: 'contrast(104%) saturate(102%)',
         }}
       />
 
-      {/* Warm vignette — deepens the frame edge so photos feel bordered/composed */}
+      {/* Vignette — deepens the frame edge so photos feel bordered/composed */}
       <div
         aria-hidden="true"
         style={{
           position: 'absolute',
           inset: 0,
           pointerEvents: 'none',
-          background: 'radial-gradient(120% 120% at 50% 18%, transparent 55%, rgba(22,19,15,0.18) 100%)',
+          background: 'radial-gradient(120% 120% at 50% 18%, transparent 60%, rgba(6,9,15,0.16) 100%)',
         }}
       />
 
@@ -72,7 +77,7 @@ export default function EditorialImage({
           backgroundImage: `url("${GRAIN_DATA_URI}")`,
           backgroundRepeat: 'repeat',
           mixBlendMode: 'overlay',
-          opacity: 0.06,
+          opacity: 0.05,
         }}
       />
     </div>

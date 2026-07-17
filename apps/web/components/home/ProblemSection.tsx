@@ -6,18 +6,11 @@ import SectionLabel from '@/components/ui/SectionLabel'
 import EditorialImage from '@/components/ui/EditorialImage'
 import { EDITORIAL_IMAGES } from '@/lib/editorialImages'
 
-const BEFORE = [
-  'Power cut wipes hours of sales data',
-  'Software freezes with no internet',
-  'Currency and tax settings don\'t match LKR',
-  'English-only — staff can\'t use it',
-]
-
-const AFTER = [
-  'Keeps running, saves everything offline',
-  'Full offline mode — no connection needed',
-  'Built for LKR, local taxes, local banks',
-  'Sinhala, Tamil, and English support',
+const COMPARISON = [
+  { before: 'Power cut wipes sales data', after: 'Keeps running, saves offline' },
+  { before: 'Freezes with no internet', after: 'Works with zero connection' },
+  { before: "Doesn't understand LKR", after: 'Built for LKR, local banks' },
+  { before: 'English-only interface', after: 'Sinhala, Tamil, English' },
 ]
 
 function CheckIcon() {
@@ -36,172 +29,54 @@ function CrossIcon() {
   )
 }
 
+// Compact paired-row comparison — a glass panel meant to float over the
+// bottom portion of a photo, not a standalone stacked block.
 function ComparisonCard() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.5, delay: 0.15 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
       style={{
-        borderRadius: 'var(--radius-xl)',
-        border: '1px solid var(--border)',
-        background: 'var(--bg-card)',
-        overflow: 'hidden',
+        borderRadius: 'var(--radius-lg)',
+        border: 'var(--glass-border)',
+        background: 'var(--bg-glass)',
+        backdropFilter: 'var(--glass-blur)',
+        WebkitBackdropFilter: 'var(--glass-blur)',
+        boxShadow: '0 20px 48px -16px rgba(6,9,15,0.4)',
+        padding: '16px 18px',
       }}
     >
-      {/* Before */}
-      <div style={{ padding: '20px 24px 4px', borderBottom: '1px solid var(--border)' }}>
-        <div
+      {COMPARISON.map((row, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, x: -8 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3, delay: i * 0.07 }}
           style={{
-            display: 'inline-flex',
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
-            gap: 6,
-            marginBottom: 16,
+            gap: 8,
+            padding: '9px 0',
+            borderTop: i === 0 ? 'none' : '1px solid var(--border-subtle)',
           }}
         >
-          <div
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: '50%',
-              background: 'var(--color-error-bg)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <CrossIcon />
+            <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', lineHeight: 1.3 }}>{row.before}</span>
           </div>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              color: 'var(--color-error)',
-            }}
-          >
-            Without Thraive
-          </span>
-        </div>
-
-        {BEFORE.map((item, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, delay: i * 0.07 }}
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: 10,
-              padding: '11px 0',
-              borderTop: i === 0 ? 'none' : '1px dashed var(--border)',
-            }}
-          >
-            <div
-              style={{
-                width: 22,
-                height: 22,
-                borderRadius: '50%',
-                background: '#FEE2E2',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                marginTop: 1,
-              }}
-            >
-              <CrossIcon />
-            </div>
-            <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{item}</p>
-          </motion.div>
-        ))}
-
-        <div style={{ height: 16 }} />
-      </div>
-
-      {/* After */}
-      <div
-        style={{
-          padding: '20px 24px 4px',
-          background: 'color-mix(in srgb, var(--color-success) 6%, transparent)',
-        }}
-      >
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            marginBottom: 16,
-          }}
-        >
-          <div
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: '50%',
-              background: 'var(--color-success-bg)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style={{ color: 'var(--text-muted)', flexShrink: 0 }}>
+            <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <CheckIcon />
+            <span style={{ fontSize: 12.5, color: 'var(--text-primary)', fontWeight: 500, lineHeight: 1.3 }}>{row.after}</span>
           </div>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              color: 'var(--color-success)',
-            }}
-          >
-            With Thraive
-          </span>
-        </div>
-
-        {AFTER.map((item, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, delay: 0.25 + i * 0.07 }}
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: 10,
-              padding: '11px 0',
-              borderTop: i === 0 ? 'none' : '1px dashed color-mix(in srgb, var(--color-success) 15%, transparent)',
-            }}
-          >
-            <div
-              style={{
-                width: 22,
-                height: 22,
-                borderRadius: '50%',
-                background: '#DCFCE7',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                marginTop: 1,
-              }}
-            >
-              <CheckIcon />
-            </div>
-            <p style={{ fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.5, fontWeight: 500 }}>{item}</p>
-          </motion.div>
-        ))}
-
-        <div style={{ height: 16 }} />
-      </div>
+        </motion.div>
+      ))}
     </motion.div>
   )
 }
@@ -288,23 +163,41 @@ export default function ProblemSection() {
             </div>
           </motion.div>
 
-          {/* Right: photo + comparison */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.5 }}
-            >
-              <EditorialImage
-                src={EDITORIAL_IMAGES.homeProblem.src}
-                alt={EDITORIAL_IMAGES.homeProblem.alt}
-                aspectRatio="16 / 9"
-                sizes="(max-width: 900px) 90vw, 560px"
-              />
-            </motion.div>
-            <ComparisonCard />
-          </div>
+          {/* Right: one layered composition — photo backdrop, comparison
+              card floats as a glass panel over its lower half. Height-
+              matched to the left column instead of two stacked blocks. */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5 }}
+            style={{
+              position: 'relative',
+              aspectRatio: '4 / 5',
+              borderRadius: 'var(--radius-xl)',
+              overflow: 'hidden',
+            }}
+          >
+            <EditorialImage
+              src={EDITORIAL_IMAGES.homeProblem.src}
+              alt={EDITORIAL_IMAGES.homeProblem.alt}
+              fill
+              sizes="(max-width: 900px) 90vw, 560px"
+              radius="0"
+            />
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(to top, rgba(6,9,15,0.55) 0%, transparent 45%)',
+                pointerEvents: 'none',
+              }}
+            />
+            <div style={{ position: 'absolute', left: 16, right: 16, bottom: 16 }}>
+              <ComparisonCard />
+            </div>
+          </motion.div>
         </div>
       </Container>
     </section>

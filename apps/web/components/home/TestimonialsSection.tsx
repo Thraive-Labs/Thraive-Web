@@ -139,7 +139,7 @@ export default function TestimonialsSection() {
                       alt={t.photo.alt}
                       fill
                       sizes="44px"
-                      style={{ objectFit: 'cover', filter: 'sepia(8%) saturate(108%) contrast(101%)' }}
+                      style={{ objectFit: 'cover', filter: 'contrast(104%) saturate(102%)' }}
                     />
                   </div>
                   <div>

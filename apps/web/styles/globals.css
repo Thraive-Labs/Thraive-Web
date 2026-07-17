@@ -30,73 +30,73 @@
   --color-autoserv:  #8B5CF6;
   --color-sonara:    #7C3AED;
 
-  /* Brand — warm terracotta/bronze signature, replaces flat purple */
-  --color-brand: #A6531F;
-  --color-brand-bright: #D98B4F;
-  --color-brand-dim: #6F340F;
+  /* Brand — electric blue signature, replaces the warm terracotta pass */
+  --color-brand: #2455E8;
+  --color-brand-bright: #4C7DFF;
+  --color-brand-dim: #17348C;
 
-  /* Semantic — warm-toned, not stock red/green */
-  --color-success: #6B8F5E;
-  --color-success-bg: rgba(107, 143, 94, 0.12);
-  --color-error: #C2604A;
-  --color-error-bg: rgba(194, 96, 74, 0.10);
+  /* Semantic — standard, legible success/error, not tied to the brand hue */
+  --color-success: #16A34A;
+  --color-success-bg: rgba(22, 163, 74, 0.10);
+  --color-error: #DC2626;
+  --color-error-bg: rgba(220, 38, 38, 0.09);
 
-  /* Thin gold hairline — used sparingly for luxury accent details */
-  --signature-gold: #C9A876;
+  /* Thin accent hairline — used sparingly for fine dividers/details */
+  --signature-gold: #94A3B8;
 }
 
 [data-mode="light"] {
-  --bg:              #FAF7F2;
-  --bg-subtle:       #F2ECE1;
-  --bg-card:         #FFFEFB;
-  --bg-glass:        rgba(255, 253, 248, 0.75);
-  --border:          #E6DDCC;
-  --border-subtle:   #EFE8DB;
-  --text-primary:    #241F1A;
-  --text-secondary:  #5C5347;
-  --text-muted:      #9A8F7E;
+  --bg:              #FFFFFF;
+  --bg-subtle:       #F4F6FA;
+  --bg-card:         #FFFFFF;
+  --bg-glass:        rgba(255, 255, 255, 0.75);
+  --border:          #E2E6EE;
+  --border-subtle:   #EDF0F5;
+  --text-primary:    #06090F;
+  --text-secondary:  #45506B;
+  --text-muted:      #8791A8;
   --glass-blur:      blur(20px) saturate(160%);
-  --glass-border:    1px solid rgba(36, 31, 26, 0.06);
+  --glass-border:    1px solid rgba(6, 9, 15, 0.06);
 }
 
 [data-mode="dark"] {
-  --bg:              #16130F;
-  --bg-subtle:       #1D1914;
-  --bg-card:         #211C17;
-  --bg-glass:        rgba(33, 28, 23, 0.8);
-  --border:          #332C23;
-  --border-subtle:   #251F19;
-  --text-primary:    #F5EFE4;
-  --text-secondary:  #B8AC98;
-  --text-muted:      #6E6455;
+  --bg:              #05070C;
+  --bg-subtle:       #0A0E16;
+  --bg-card:         #0F1420;
+  --bg-glass:        rgba(15, 20, 32, 0.8);
+  --border:          #1E2635;
+  --border-subtle:   #151B27;
+  --text-primary:    #F5F7FB;
+  --text-secondary:  #A3AEC4;
+  --text-muted:      #57627A;
   --glass-blur:      blur(20px) saturate(180%);
-  --glass-border:    1px solid rgba(255, 250, 240, 0.06);
+  --glass-border:    1px solid rgba(245, 247, 251, 0.06);
 }
 
-/* Editorial Warmth — luxury default palette for --season-* tokens.
+/* Editorial Warmth — blue/black/white default palette for --season-* tokens.
    Zero-specificity via :where() so any [data-season="x"] rule (or an inline
    style set by the seasonal engine while FX is enabled) always wins. Applies
    whenever data-season is absent from <html> — i.e. Seasonal FX is off.
    Keep in sync with lib/luxuryPalette.ts */
 :where(:root) {
-  --season-ambient:        #D9A15C;
-  --season-ambient-dim:    #C2854A;
-  --season-glow:           rgba(166, 83, 31, 0.08);
-  --season-glow-soft:      rgba(166, 83, 31, 0.05);
-  --season-bg-tint:        rgba(201, 112, 58, 0.03);
-  --season-card-border:    rgba(166, 83, 31, 0.14);
-  --season-accent:         #A6531F;
-  --season-btn-bg:         #8A4118;
-  --season-btn-hover:      #6F340F;
+  --season-ambient:        #60A5FA;
+  --season-ambient-dim:    #3B82F6;
+  --season-glow:           rgba(37, 99, 235, 0.08);
+  --season-glow-soft:      rgba(37, 99, 235, 0.05);
+  --season-bg-tint:        rgba(37, 99, 235, 0.03);
+  --season-card-border:    rgba(37, 99, 235, 0.14);
+  --season-accent:         #2455E8;
+  --season-btn-bg:         #1D4ED8;
+  --season-btn-hover:      #1E40AF;
   --tod-tint:              transparent;
   --tod-glow:              transparent;
 }
 
 :where([data-mode="dark"]) {
-  --season-glow:           rgba(217, 139, 79, 0.12);
-  --season-glow-soft:      rgba(217, 139, 79, 0.05);
-  --season-card-border:    rgba(217, 139, 79, 0.16);
-  --season-accent:         #D98B4F;
+  --season-glow:           rgba(96, 165, 250, 0.14);
+  --season-glow-soft:      rgba(96, 165, 250, 0.06);
+  --season-card-border:    rgba(96, 165, 250, 0.18);
+  --season-accent:         #5B8DFF;
 }
 
 [data-time="dawn"] {

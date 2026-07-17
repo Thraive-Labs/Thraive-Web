@@ -4,6 +4,25 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9b (Redesign feedback pass)
+
+### fix: palette feedback — human warmth from photography, not brown chrome
+- Reworked the whole token system from the terracotta/cream "Editorial Warmth" pass to a blue/black/white system: white light-mode background (was cream), warm near-black replaced with a true near-black, electric blue (`#2455E8`) signature accent replacing the terracotta one, and `lib/luxuryPalette.ts` updated to match — same mechanism, new hex values
+- `EditorialImage.tsx` and the testimonial avatar filter: dropped the warm sepia color-grade push — the UI chrome now carries the precision (blue/black/white), the photography carries the human warmth as-shot, no artificial color grade fighting that
+- Semantic success/error colors reverted to standard green/red (were unnecessarily re-themed warm in the first pass)
+
+### fix: light theme is now the true default
+- `THEME_SCRIPT` (`app/layout.tsx`) and `ThemeProvider` (`contexts/theme-context.tsx`) no longer fall back to `prefers-color-scheme` — only an explicit stored choice produces dark mode, otherwise light always wins, matching the ask directly
+
+### feat: hero section redesigned — more eye-catching, more technical
+- `GridBackdrop` — a faded blueprint grid pattern behind the hero (Vercel/Linear-style technical texture)
+- `StatusChip` — a floating glassmorphic "Running offline · synced" chip overlapping the hero photo's corner, with a live pulse indicator
+- Hero photo now sits at a slight rotation with subtle mouse-follow parallax (desktop only, skipped under `prefers-reduced-motion`)
+
+### fix: Problem section left/right column height mismatch
+- The right column was two stacked blocks (photo, then a full before/after card) and ended up far taller than the left column's copy
+- Redesigned as one layered composition: the photo fills the whole column as a backdrop, and a condensed glassmorphic comparison panel (paired before → after rows, not two separate stacked lists) floats over its lower half — total height now matches the aspect-ratio-driven photo, not a photo-plus-card stack
+
 ## 2026-07-18 — Phase 9 (Editorial Warmth Redesign)
 
 ### feat: warm/editorial visual redesign of the marketing site

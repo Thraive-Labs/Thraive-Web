@@ -15,12 +15,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<Mode>('light')
 
   useEffect(() => {
+    // Light is the default regardless of OS preference — only an explicit
+    // stored choice (from the toggle) should ever produce dark mode.
     function resolveMode(): Mode {
       try {
         const saved = localStorage.getItem('theme')
         if (saved === 'dark' || saved === 'light') return saved
       } catch {}
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      return 'light'
     }
 
     // Defer initial sync (avoids synchronous setState-in-effect lint rule)
@@ -30,22 +32,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       document.documentElement.setAttribute('data-mode', initial)
     }, 0)
 
-    // Follow system preference changes when no manual override is saved
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const onSysChange = (e: MediaQueryListEvent) => {
-      let saved: string | null = null
-      try { saved = localStorage.getItem('theme') } catch {}
-      if (!saved) {
-        const next: Mode = e.matches ? 'dark' : 'light'
-        setMode(next)
-        document.documentElement.setAttribute('data-mode', next)
-      }
-    }
-    mq.addEventListener('change', onSysChange)
-    return () => {
-      clearTimeout(t)
-      mq.removeEventListener('change', onSysChange)
-    }
+    return () => clearTimeout(t)
   }, [])
 
   const toggle = () => {
