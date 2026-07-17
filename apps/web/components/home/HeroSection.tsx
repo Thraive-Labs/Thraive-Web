@@ -92,7 +92,7 @@ export default function HeroSection() {
         position: 'relative',
         minHeight: '100svh',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         overflow: 'hidden',
       }}
       aria-labelledby="hero-heading"
@@ -137,7 +137,7 @@ export default function HeroSection() {
           width: '100%',
           maxWidth: 1200,
           margin: '0 auto',
-          padding: '76px 24px 40px',
+          padding: '40px 24px 40px',
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 56,

@@ -4,6 +4,17 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9g (Hero content raised further)
+
+### fix: hero content still sitting too low
+- Switched the section from `alignItems: 'center'` (which vertically centers
+  within `100svh`, pulled down by the sticky navbar's own height) to
+  `alignItems: 'flex-start'` with a fixed, small top padding (`40px`) —
+  direct control over position instead of relying on centering math
+- Verified at 1440x900, 1280x720, and mobile 390x844 in both light and dark
+  mode — content sits right below the navbar with a clean gap, photos still
+  fully visible with room to spare before the fold
+
 ## 2026-07-18 — Phase 9f (Hero: overlapping photos, content raised, mobile image bug fixed)
 
 ### feat: two overlapping photos in the hero
