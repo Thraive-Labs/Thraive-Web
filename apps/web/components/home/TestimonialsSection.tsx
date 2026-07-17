@@ -1,9 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import Container from '@/components/ui/Container'
 import SectionLabel from '@/components/ui/SectionLabel'
 import GlassCard from '@/components/ui/GlassCard'
+import { EDITORIAL_IMAGES } from '@/lib/editorialImages'
 
 const TESTIMONIALS = [
   {
@@ -12,7 +14,7 @@ const TESTIMONIALS = [
     name: 'Priya Wickramasinghe',
     business: 'Cafe owner',
     location: 'Kandy',
-    initials: 'PW',
+    photo: EDITORIAL_IMAGES.testimonials[0],
   },
   {
     quote:
@@ -20,7 +22,7 @@ const TESTIMONIALS = [
     name: 'Roshan Fernando',
     business: 'Distribution manager',
     location: 'Galle',
-    initials: 'RF',
+    photo: EDITORIAL_IMAGES.testimonials[1],
   },
   {
     quote:
@@ -28,7 +30,7 @@ const TESTIMONIALS = [
     name: 'Dr. Chamali Perera',
     business: 'Pharmacy',
     location: 'Colombo',
-    initials: 'CP',
+    photo: EDITORIAL_IMAGES.testimonials[2],
   },
 ]
 
@@ -50,9 +52,10 @@ export default function TestimonialsSection() {
           <h2
             id="testimonials-heading"
             style={{
-              fontSize: 'clamp(28px, 4vw, 44px)',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(30px, 4.5vw, 48px)',
+              fontWeight: 400,
+              letterSpacing: '-0.01em',
               lineHeight: 1.15,
               color: 'var(--text-primary)',
             }}
@@ -121,23 +124,23 @@ export default function TestimonialsSection() {
                 {/* Attribution */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div
-                    aria-hidden="true"
                     style={{
-                      width: 40,
-                      height: 40,
+                      position: 'relative',
+                      width: 44,
+                      height: 44,
                       borderRadius: '50%',
-                      background: 'var(--season-glow-soft)',
+                      overflow: 'hidden',
                       border: '1px solid var(--season-card-border)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 13,
-                      fontWeight: 600,
-                      color: 'var(--season-accent)',
                       flexShrink: 0,
                     }}
                   >
-                    {t.initials}
+                    <Image
+                      src={t.photo.src}
+                      alt={t.photo.alt}
+                      fill
+                      sizes="44px"
+                      style={{ objectFit: 'cover', filter: 'sepia(8%) saturate(108%) contrast(101%)' }}
+                    />
                   </div>
                   <div>
                     <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>

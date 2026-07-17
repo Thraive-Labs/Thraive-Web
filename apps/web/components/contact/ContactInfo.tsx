@@ -11,9 +11,10 @@ export default function ContactInfo() {
     >
       <h2
         style={{
-          fontSize: 'clamp(24px, 3vw, 36px)',
-          fontWeight: 700,
-          letterSpacing: '-0.02em',
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(26px, 3.5vw, 40px)',
+          fontWeight: 400,
+          letterSpacing: '-0.01em',
           lineHeight: 1.2,
           color: 'var(--text-primary)',
           marginBottom: 16,

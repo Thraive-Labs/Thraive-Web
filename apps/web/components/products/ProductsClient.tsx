@@ -45,9 +45,10 @@ export default function ProductsClient({ products }: { products: ProductDetail[]
             <h1
               id="products-heading"
               style={{
-                fontSize: 'clamp(36px, 5vw, 60px)',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(38px, 6vw, 68px)',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
                 lineHeight: 1.08,
                 color: 'var(--text-primary)',
                 marginBottom: 20,

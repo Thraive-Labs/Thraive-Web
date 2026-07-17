@@ -35,9 +35,10 @@ export default function AboutMission() {
             <h2
               id="mission-heading"
               style={{
-                fontSize: 'clamp(26px, 3.5vw, 40px)',
-                fontWeight: 700,
-                letterSpacing: '-0.02em',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(28px, 4vw, 44px)',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
                 lineHeight: 1.2,
                 color: 'var(--text-primary)',
                 marginBottom: 20,

@@ -30,38 +30,73 @@
   --color-autoserv:  #8B5CF6;
   --color-sonara:    #7C3AED;
 
-  /* Brand */
-  --color-brand: #7C3AED;
-  --color-brand-bright: #8B5CF6;
-  --color-brand-dim: #5B21B6;
+  /* Brand — warm terracotta/bronze signature, replaces flat purple */
+  --color-brand: #A6531F;
+  --color-brand-bright: #D98B4F;
+  --color-brand-dim: #6F340F;
+
+  /* Semantic — warm-toned, not stock red/green */
+  --color-success: #6B8F5E;
+  --color-success-bg: rgba(107, 143, 94, 0.12);
+  --color-error: #C2604A;
+  --color-error-bg: rgba(194, 96, 74, 0.10);
+
+  /* Thin gold hairline — used sparingly for luxury accent details */
+  --signature-gold: #C9A876;
 }
 
 [data-mode="light"] {
-  --bg:              #FAFAFA;
-  --bg-subtle:       #F4F4F5;
-  --bg-card:         #FFFFFF;
-  --bg-glass:        rgba(255, 255, 255, 0.75);
-  --border:          #E4E4E7;
-  --border-subtle:   #F0F0F1;
-  --text-primary:    #09090B;
-  --text-secondary:  #52525B;
-  --text-muted:      #A1A1AA;
+  --bg:              #FAF7F2;
+  --bg-subtle:       #F2ECE1;
+  --bg-card:         #FFFEFB;
+  --bg-glass:        rgba(255, 253, 248, 0.75);
+  --border:          #E6DDCC;
+  --border-subtle:   #EFE8DB;
+  --text-primary:    #241F1A;
+  --text-secondary:  #5C5347;
+  --text-muted:      #9A8F7E;
   --glass-blur:      blur(20px) saturate(160%);
-  --glass-border:    1px solid rgba(0, 0, 0, 0.06);
+  --glass-border:    1px solid rgba(36, 31, 26, 0.06);
 }
 
 [data-mode="dark"] {
-  --bg:              #09090B;
-  --bg-subtle:       #111113;
-  --bg-card:         #18181B;
-  --bg-glass:        rgba(24, 24, 27, 0.8);
-  --border:          #27272A;
-  --border-subtle:   #1C1C1F;
-  --text-primary:    #FAFAFA;
-  --text-secondary:  #A1A1AA;
-  --text-muted:      #52525B;
+  --bg:              #16130F;
+  --bg-subtle:       #1D1914;
+  --bg-card:         #211C17;
+  --bg-glass:        rgba(33, 28, 23, 0.8);
+  --border:          #332C23;
+  --border-subtle:   #251F19;
+  --text-primary:    #F5EFE4;
+  --text-secondary:  #B8AC98;
+  --text-muted:      #6E6455;
   --glass-blur:      blur(20px) saturate(180%);
-  --glass-border:    1px solid rgba(255, 255, 255, 0.06);
+  --glass-border:    1px solid rgba(255, 250, 240, 0.06);
+}
+
+/* Editorial Warmth — luxury default palette for --season-* tokens.
+   Zero-specificity via :where() so any [data-season="x"] rule (or an inline
+   style set by the seasonal engine while FX is enabled) always wins. Applies
+   whenever data-season is absent from <html> — i.e. Seasonal FX is off.
+   Keep in sync with lib/luxuryPalette.ts */
+:where(:root) {
+  --season-ambient:        #D9A15C;
+  --season-ambient-dim:    #C2854A;
+  --season-glow:           rgba(166, 83, 31, 0.08);
+  --season-glow-soft:      rgba(166, 83, 31, 0.05);
+  --season-bg-tint:        rgba(201, 112, 58, 0.03);
+  --season-card-border:    rgba(166, 83, 31, 0.14);
+  --season-accent:         #A6531F;
+  --season-btn-bg:         #8A4118;
+  --season-btn-hover:      #6F340F;
+  --tod-tint:              transparent;
+  --tod-glow:              transparent;
+}
+
+:where([data-mode="dark"]) {
+  --season-glow:           rgba(217, 139, 79, 0.12);
+  --season-glow-soft:      rgba(217, 139, 79, 0.05);
+  --season-card-border:    rgba(217, 139, 79, 0.16);
+  --season-accent:         #D98B4F;
 }
 
 [data-time="dawn"] {
@@ -148,6 +183,11 @@ body {
   to { transform: rotate(360deg); }
 }
 
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -161,6 +201,8 @@ body {
 @media (max-width: 768px) {
   .grid-3 { grid-template-columns: 1fr !important; }
   .grid-cols-1 { grid-template-columns: 1fr !important; }
+  .hero-split { grid-template-columns: 1fr !important; text-align: center !important; }
+  .hero-split-image { max-width: 420px; margin: 0 auto; }
 }
 @media (max-width: 900px) {
   .grid-steps { grid-template-columns: 1fr 1fr !important; }

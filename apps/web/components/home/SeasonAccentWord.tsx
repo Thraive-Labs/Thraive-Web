@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import type { Season } from '@/lib/seasonal'
+import { useSeasonalFx } from '@/contexts/seasonal-fx-context'
 
 const SEASON_ACCENT: Record<Season, string> = {
   winter: '#0EA5E9',
@@ -80,6 +81,7 @@ interface Props {
 }
 
 export default function SeasonAccentWord({ children, className, style }: Props) {
+  const { enabled: fxEnabled } = useSeasonalFx()
   const [mounted, setMounted] = useState(false)
   const [state, setState] = useState<{ primary: Season; secondary: Season | null; blend: number }>({
     primary: 'winter',
@@ -115,8 +117,9 @@ export default function SeasonAccentWord({ children, className, style }: Props) 
     return buildMask(state.blend)
   }, [mounted, state.secondary, state.blend])
 
-  // Pre-mount: match SSR exactly — no infection, just the season accent CSS var
-  if (!mounted) {
+  // Pre-mount, or Seasonal FX off: just the season accent CSS var (luxury
+  // default when FX is off), no mask/infection animation.
+  if (!mounted || !fxEnabled) {
     return (
       <span className={className} style={{ color: 'var(--season-accent)', ...style }}>
         {children}

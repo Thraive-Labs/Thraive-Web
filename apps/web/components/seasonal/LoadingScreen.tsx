@@ -14,6 +14,7 @@ interface LoadingScreenProps {
   blend: number
   secondary: Season | null
   darkMode?: boolean
+  fxEnabled?: boolean
 }
 
 type LoadState = 'animating' | 'ready' | 'exiting'
@@ -51,7 +52,7 @@ function LogoMark({ glowing }: { glowing: boolean }) {
         d="M24 12 L36 24 L24 36 L12 24 Z"
         stroke="var(--color-brand)"
         strokeWidth="1"
-        fill="rgba(124,58,237,0.12)"
+        fill="rgba(166,83,31,0.12)"
       />
       {/* Center dot */}
       <circle cx="24" cy="24" r="3" fill="var(--color-brand-bright)" />
@@ -71,6 +72,7 @@ export default function LoadingScreen({
   month,
   blend,
   secondary,
+  fxEnabled = false,
 }: LoadingScreenProps) {
   const [loadState, setLoadState] = useState<LoadState>('animating')
   const [logoGlowing, setLogoGlowing] = useState(false)
@@ -206,14 +208,16 @@ export default function LoadingScreen({
             gap: '24px',
           }}
         >
-          {/* Layer 1: Particles */}
-          <ParticleCanvas
-            season={season}
-            timeOfDay={timeOfDay}
-            month={month}
-            blend={blend}
-            secondary={secondary}
-          />
+          {/* Layer 1: Particles — only when Seasonal FX is enabled */}
+          {fxEnabled && (
+            <ParticleCanvas
+              season={season}
+              timeOfDay={timeOfDay}
+              month={month}
+              blend={blend}
+              secondary={secondary}
+            />
+          )}
 
           {/* Layer 2: Aura — temporarily disabled */}
           {/* <AuraLayer

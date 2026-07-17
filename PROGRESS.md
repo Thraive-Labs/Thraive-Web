@@ -1,8 +1,49 @@
 # Progress
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-07-18
 
 ## Current State
+
+Marketing site redesigned to "Editorial Warmth" — see Phase 9 below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+
+## Phase 9 — Editorial Warmth Redesign (2026-07-18)
+
+Feedback: the site felt "robotic — no warmth, no human feel, no luxury." Investigation found the site had zero real imagery anywhere, and the display font (`Instrument Serif`) was referenced in `--font-display` since Phase 2 but never actually installed, so headlines rendered in plain sans the whole time.
+
+**Design tokens (`styles/globals.css`):**
+- `Instrument Serif` installed (`@fontsource/instrument-serif`) and actually loaded in `app/layout.tsx`; applied to the hero H1 and every major section heading/pull-quote (fontWeight 400 — it's a single-weight font)
+- Warm neutral palette replacing pure black/white/gray: cream/parchment in light mode, warm near-black in dark mode — same variable names (`--bg`, `--text-primary`, etc.), no component changes needed
+- New terracotta/bronze "luxury signature" accent replacing flat purple `--color-brand`
+- New semantic tokens `--color-success` / `--color-error` / `--color-success-bg` / `--color-error-bg` (warm-toned), replacing ~10 hardcoded hex values across `ProblemSection.tsx`, `ContactForm.tsx`, `ProductPricing.tsx`, `ProductHero.tsx`
+- New `--signature-gold` hairline accent token
+- `components/ui/GrainOverlay.tsx` — fixed, low-opacity SVG noise texture over the whole viewport
+
+**Imagery:**
+- `lib/editorialImages.ts` — centralized curated Unsplash photo URLs (real, standard-license, freely usable), one constant per slot, swap-in-place for real company photography later
+- `components/ui/EditorialImage.tsx` — shared `next/image` wrapper applying a consistent warm color-grade filter, rounded frame, shadow, and grain so every photo reads as one art direction
+- `next.config.ts` — `images.remotePatterns` allows `images.unsplash.com`
+- Added photography to: homepage hero (asymmetric split layout), Problem section, testimonial avatars (replacing initials circles), About hero, About team (new photo grid — previously text-only), product page hero backdrop
+- Deliberately left untouched (icon/typography only, no images): products grid, values, stats, how-it-works, FAQ, pricing, closing CTA — per "don't clutter"
+
+**Seasonal FX toggle — defaults OFF (`contexts/seasonal-fx-context.tsx`, new):**
+- The seasonal particle/color engine (non-negotiable per CLAUDE.md rules 1-4) is now optional while the redesign is evaluated in demo mode, default OFF
+- Mechanism: the 9 `--season-*` UI tokens get a zero-specificity `:where(:root)` fallback in `globals.css` (the fixed luxury palette, `lib/luxuryPalette.ts`) that only applies when `data-season` is absent from `<html>`. A blocking anti-FOUC script in `app/layout.tsx` (same pattern as the existing dark/light `THEME_SCRIPT`) strips the season attributes before first paint unless `localStorage['seasonal-fx'] === 'on'`
+- `SeasonalEngine.tsx` only mounts `ParticleCanvas`/`AccumulationCanvas` and only calls `applySeasonColorBlend` while FX is enabled; listens for a `seasonal-fx-change` event to toggle live without a reload
+- `LoadingScreen.tsx` skips its internal particle layer when FX is off
+- `SeasonAccentWord.tsx` skips its word-infection mask animation when FX is off (renders plain `var(--season-accent)` text)
+- Control lives in the existing bottom-right `SeasonDevPanel` — an On/Off switch, not a new UI surface
+- Verified: canvases mount/unmount correctly on toggle, zero console errors, confirmed via Playwright in both light and dark mode
+
+**Other polish:**
+- `ProductHero.tsx`'s `MockUI` redesigned with a photo backdrop behind it (layered composition) and a small live "Synced" pulse micro-interaction; traffic-light dots now use semantic/signature tokens instead of hardcoded hex
+- `Footer.tsx` social links: real minimal SVG icons (X, LinkedIn) replacing letter-avatar placeholders; season easter-egg now hides cleanly instead of defaulting to "Winter" when FX is off
+- `Navbar.tsx` mobile backdrop and dropdown shadow warmed from pure black to warm-ink rgba
+
+Build, typecheck, and lint all pass (lint has 2 pre-existing, unrelated issues in `admin-login`/`login` pages not touched by this work). Scope was marketing site only per user decision — customer portal and admin portal unchanged.
+
+---
+
+## Prior state (through Phase 8b)
 
 Phase 4 complete. All legal pages, blog placeholder, full customer portal (dashboard/downloads/billing/settings), auth pages (login/register/forgot-password), and middleware stub are built. No Supabase yet — all portal data is mock.
 
@@ -247,7 +288,7 @@ STRIPE_WILDCAFE_STARTER_MONTHLY_PRICE_ID=price_xxx
 
 Build: passing. Typecheck: passing. Lint: passing.
 
-## Current State
+## State as of Phase 8b (superseded by Phase 9 above)
 
 Phases 5b, 6, 7, 8, and 8b complete. Full application is built:
 - Marketing site with seasonal engine

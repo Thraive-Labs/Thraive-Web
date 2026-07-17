@@ -147,9 +147,10 @@ export default function ProductFAQ({ product }: { product: ProductDetail }) {
           <h2
             id="faq-heading"
             style={{
-              fontSize: 'clamp(28px, 4vw, 44px)',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(30px, 4.5vw, 48px)',
+              fontWeight: 400,
+              letterSpacing: '-0.01em',
               lineHeight: 1.15,
               color: 'var(--text-primary)',
             }}

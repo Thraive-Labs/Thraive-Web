@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion'
 import Container from '@/components/ui/Container'
 import SectionLabel from '@/components/ui/SectionLabel'
+import EditorialImage from '@/components/ui/EditorialImage'
+import { EDITORIAL_IMAGES } from '@/lib/editorialImages'
 
 const BEFORE = [
   'Power cut wipes hours of sales data',
@@ -21,7 +23,7 @@ const AFTER = [
 function CheckIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <path d="M3 7l3 3 5-5" stroke="#16A34A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 7l3 3 5-5" stroke="var(--color-success)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -29,7 +31,7 @@ function CheckIcon() {
 function CrossIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <path d="M4 4l6 6M10 4l-6 6" stroke="#DC2626" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M4 4l6 6M10 4l-6 6" stroke="var(--color-error)" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   )
 }
@@ -63,7 +65,7 @@ function ComparisonCard() {
               width: 18,
               height: 18,
               borderRadius: '50%',
-              background: '#FEE2E2',
+              background: 'var(--color-error-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -78,7 +80,7 @@ function ComparisonCard() {
               fontWeight: 700,
               letterSpacing: '0.06em',
               textTransform: 'uppercase',
-              color: '#DC2626',
+              color: 'var(--color-error)',
             }}
           >
             Without Thraive
@@ -126,7 +128,7 @@ function ComparisonCard() {
       <div
         style={{
           padding: '20px 24px 4px',
-          background: 'rgba(22, 163, 74, 0.03)',
+          background: 'color-mix(in srgb, var(--color-success) 6%, transparent)',
         }}
       >
         <div
@@ -142,7 +144,7 @@ function ComparisonCard() {
               width: 18,
               height: 18,
               borderRadius: '50%',
-              background: '#DCFCE7',
+              background: 'var(--color-success-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -157,7 +159,7 @@ function ComparisonCard() {
               fontWeight: 700,
               letterSpacing: '0.06em',
               textTransform: 'uppercase',
-              color: '#16A34A',
+              color: 'var(--color-success)',
             }}
           >
             With Thraive
@@ -176,7 +178,7 @@ function ComparisonCard() {
               alignItems: 'flex-start',
               gap: 10,
               padding: '11px 0',
-              borderTop: i === 0 ? 'none' : '1px dashed rgba(22,163,74,0.15)',
+              borderTop: i === 0 ? 'none' : '1px dashed color-mix(in srgb, var(--color-success) 15%, transparent)',
             }}
           >
             <div
@@ -236,9 +238,10 @@ export default function ProblemSection() {
             <h2
               id="problem-heading"
               style={{
-                fontSize: 'clamp(26px, 3.5vw, 40px)',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(28px, 4vw, 44px)',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
                 lineHeight: 1.15,
                 color: 'var(--text-primary)',
                 marginBottom: 24,
@@ -285,8 +288,23 @@ export default function ProblemSection() {
             </div>
           </motion.div>
 
-          {/* Right: comparison */}
-          <ComparisonCard />
+          {/* Right: photo + comparison */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5 }}
+            >
+              <EditorialImage
+                src={EDITORIAL_IMAGES.homeProblem.src}
+                alt={EDITORIAL_IMAGES.homeProblem.alt}
+                aspectRatio="16 / 9"
+                sizes="(max-width: 900px) 90vw, 560px"
+              />
+            </motion.div>
+            <ComparisonCard />
+          </div>
         </div>
       </Container>
     </section>

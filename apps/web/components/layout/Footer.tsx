@@ -23,6 +23,27 @@ function MoonIcon() {
   )
 }
 
+function XIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M9.51 6.77 14.8 1h-1.25L8.95 5.96 5.5 1H1l5.55 7.9L1 15h1.25l4.87-5.24L11.5 15H16L9.51 6.77Zm-1.72 1.86-.56-.8L2.7 1.9h1.93l3.6 5.1.56.8 4.68 6.63h-1.93l-3.75-5.3Z" />
+    </svg>
+  )
+}
+
+function LinkedInIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M3.6 5.4H1V15h2.6V5.4ZM2.3 4.2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM15 9.3c0-2.6-1.4-3.8-3.2-3.8-1.5 0-2.1.8-2.5 1.4V5.4H6.7c0 .7 0 9.6 0 9.6h2.6v-5.4c0-.3 0-.6.1-.8.2-.6.7-1.2 1.6-1.2 1.1 0 1.6.9 1.6 2.2V15H15V9.3Z" />
+    </svg>
+  )
+}
+
+const SOCIAL_LINKS = [
+  { name: 'LinkedIn', icon: LinkedInIcon },
+  { name: 'X', icon: XIcon },
+]
+
 const CURRENT_YEAR = new Date().getFullYear()
 
 const SEASON_NAMES: Record<string, string> = {
@@ -38,13 +59,17 @@ export default function Footer() {
 
   useEffect(() => {
     function readSeason() {
-      setSeason(document.documentElement.getAttribute('data-season') ?? 'winter')
+      // Absent when Seasonal FX is off — the easter egg simply doesn't show,
+      // rather than falling back to a season that isn't actually active.
+      setSeason(document.documentElement.getAttribute('data-season') ?? '')
     }
     const t = setTimeout(readSeason, 0)
     window.addEventListener('season-dev-override', readSeason)
+    window.addEventListener('seasonal-fx-change', readSeason)
     return () => {
       clearTimeout(t)
       window.removeEventListener('season-dev-override', readSeason)
+      window.removeEventListener('seasonal-fx-change', readSeason)
     }
   }, [])
 
@@ -120,9 +145,9 @@ export default function Footer() {
             <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 220, marginBottom: 20 }}>
               Building offline-first, privacy-first business software for Sri Lanka and beyond.
             </p>
-            {/* Social links placeholder */}
+            {/* Social links — hrefs are placeholders until real accounts exist */}
             <div style={{ display: 'flex', gap: 8 }}>
-              {['LinkedIn', 'X'].map((name) => (
+              {SOCIAL_LINKS.map(({ name, icon: Icon }) => (
                 <a
                   key={name}
                   href="#"
@@ -137,8 +162,6 @@ export default function Footer() {
                     justifyContent: 'center',
                     color: 'var(--text-muted)',
                     textDecoration: 'none',
-                    fontSize: 11,
-                    fontWeight: 600,
                     transition: 'border-color 150ms, color 150ms',
                   }}
                   onMouseEnter={(e) => {
@@ -152,7 +175,7 @@ export default function Footer() {
                     el.style.color = 'var(--text-muted)'
                   }}
                 >
-                  {name[0]}
+                  <Icon />
                 </a>
               ))}
             </div>

@@ -20,7 +20,7 @@ const SUBJECTS = [
 
 function FieldError({ id, message }: { id: string; message: string }) {
   return (
-    <p id={id} role="alert" style={{ fontSize: 12, color: '#EF4444', marginTop: 4 }}>
+    <p id={id} role="alert" style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4 }}>
       {message}
     </p>
   )
@@ -85,7 +85,7 @@ export default function ContactForm() {
     height: 44,
     padding: '0 14px',
     borderRadius: 'var(--radius-md)',
-    border: `1px solid ${hasError ? '#EF4444' : 'var(--border)'}`,
+    border: `1px solid ${hasError ? 'var(--color-error)' : 'var(--border)'}`,
     background: 'var(--bg)',
     color: 'var(--text-primary)',
     fontSize: 15,
@@ -112,8 +112,8 @@ export default function ContactForm() {
             width: 52,
             height: 52,
             borderRadius: '50%',
-            background: '#10B98118',
-            border: '1px solid #10B98130',
+            background: 'var(--color-success-bg)',
+            border: '1px solid color-mix(in srgb, var(--color-success) 30%, transparent)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -124,7 +124,7 @@ export default function ContactForm() {
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
             <path
               d="M5 11l4 4 8-8"
-              stroke="#10B981"
+              stroke="var(--color-success)"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -295,7 +295,7 @@ export default function ContactForm() {
 
       {/* Server error */}
       {serverError && (
-        <p role="alert" style={{ fontSize: 13, color: '#EF4444', padding: '10px 14px', borderRadius: 'var(--radius-md)', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+        <p role="alert" style={{ fontSize: 13, color: 'var(--color-error)', padding: '10px 14px', borderRadius: 'var(--radius-md)', background: 'var(--color-error-bg)', border: '1px solid color-mix(in srgb, var(--color-error) 20%, transparent)' }}>
           {serverError}
         </p>
       )}

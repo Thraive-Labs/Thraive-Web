@@ -26,9 +26,10 @@ export default function ClosingSection() {
           <h2
             id="closing-heading"
             style={{
-              fontSize: 'clamp(32px, 5vw, 56px)',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(34px, 5.5vw, 60px)',
+              fontWeight: 400,
+              letterSpacing: '-0.01em',
               lineHeight: 1.1,
               color: 'var(--text-primary)',
               marginBottom: 20,

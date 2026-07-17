@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion'
 import Container from '@/components/ui/Container'
+import EditorialImage from '@/components/ui/EditorialImage'
+import { EDITORIAL_IMAGES } from '@/lib/editorialImages'
 import type { ProductDetail } from '@/lib/product-details'
 
 interface ProductHeroProps {
@@ -41,7 +43,7 @@ function MockUI({ accent }: { accent: string }) {
               width: 10,
               height: 10,
               borderRadius: '50%',
-              background: i === 1 ? '#EF4444' : i === 2 ? '#F59E0B' : '#10B981',
+              background: i === 1 ? 'var(--color-error)' : i === 2 ? 'var(--signature-gold)' : 'var(--color-success)',
               opacity: 0.6,
             }}
           />
@@ -59,13 +61,30 @@ function MockUI({ accent }: { accent: string }) {
         />
         <div
           style={{
-            width: 60,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5,
             height: 20,
+            padding: '0 8px',
             borderRadius: 4,
-            background: accent,
-            opacity: 0.8,
+            background: `${accent}12`,
+            border: `1px solid ${accent}30`,
+            flexShrink: 0,
           }}
-        />
+        >
+          <div
+            style={{
+              width: 5,
+              height: 5,
+              borderRadius: '50%',
+              background: 'var(--color-success)',
+              animation: 'soft-pulse 1.8s ease-in-out infinite',
+            }}
+          />
+          <span style={{ fontSize: 9, fontWeight: 600, color: accent, letterSpacing: '0.02em' }}>
+            Synced
+          </span>
+        </div>
       </div>
 
       {/* Body */}
@@ -235,9 +254,10 @@ export default function ProductHero({ product }: ProductHeroProps) {
             <h1
               id="product-hero-heading"
               style={{
-                fontSize: 'clamp(36px, 5vw, 60px)',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(38px, 6vw, 68px)',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
                 lineHeight: 1.08,
                 color: 'var(--text-primary)',
                 marginBottom: 16,
@@ -344,13 +364,25 @@ export default function ProductHero({ product }: ProductHeroProps) {
             </div>
           </motion.div>
 
-          {/* Right: mock UI */}
+          {/* Right: mock UI over a photo backdrop */}
           <motion.div
             initial={{ opacity: 0, x: 24, scale: 0.97 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+            style={{ position: 'relative', padding: '10% 6% 6% 10%' }}
           >
-            <MockUI accent={product.accent} />
+            <div style={{ position: 'absolute', inset: '10% 0 0 10%', zIndex: 0 }}>
+              <EditorialImage
+                src={EDITORIAL_IMAGES.productHeroBackdrop.src}
+                alt={EDITORIAL_IMAGES.productHeroBackdrop.alt}
+                aspectRatio="4 / 3"
+                sizes="(max-width: 900px) 90vw, 480px"
+                radius="var(--radius-xl)"
+              />
+            </div>
+            <div style={{ position: 'relative', zIndex: 1, transform: 'translate(-4%, 4%)' }}>
+              <MockUI accent={product.accent} />
+            </div>
           </motion.div>
         </div>
       </Container>

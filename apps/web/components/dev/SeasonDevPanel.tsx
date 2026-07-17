@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getSeasonState, type SeasonState, type TimeOfDay } from '@/lib/seasonal'
+import { useSeasonalFx } from '@/contexts/seasonal-fx-context'
 
 // ─── constants ───────────────────────────────────────────────────────────────
 
@@ -95,6 +96,7 @@ function getStoredParticlePercent(): number {
 
 export default function SeasonDevPanel() {
   const now = new Date()
+  const { enabled: fxEnabled, setEnabled: setFxEnabled } = useSeasonalFx()
   const [open, setOpen] = useState(false)
   const [month, setMonth] = useState(now.getMonth() + 1)
   const [day, setDay] = useState(15)
@@ -200,11 +202,11 @@ export default function SeasonDevPanel() {
                   position: 'absolute',
                   inset: 0,
                   borderRadius: '50%',
-                  background: accent,
-                  animation: isPlaying ? 'dev-pulse 1.2s ease-in-out infinite' : 'none',
+                  background: fxEnabled ? accent : 'var(--text-muted)',
+                  animation: fxEnabled && isPlaying ? 'dev-pulse 1.2s ease-in-out infinite' : 'none',
                 }}
               />
-              {isPlaying && (
+              {fxEnabled && isPlaying && (
                 <div
                   style={{
                     position: 'absolute',
@@ -227,7 +229,7 @@ export default function SeasonDevPanel() {
                 whiteSpace: 'nowrap',
               }}
             >
-              {SEASON_NAMES[currentSeason]} &middot; {MONTHS[month - 1]}
+              {fxEnabled ? `${SEASON_NAMES[currentSeason]} · ${MONTHS[month - 1]}` : 'Seasonal FX · Off'}
             </span>
           </motion.button>
         )}
@@ -392,6 +394,61 @@ export default function SeasonDevPanel() {
 
               {/* ── Scrollable body ── */}
               <div style={{ flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+                {/* Seasonal FX on/off — demo-mode master switch */}
+                <div>
+                  <SectionTitle>Seasonal FX</SectionTitle>
+                  <button
+                    onClick={() => setFxEnabled(!fxEnabled)}
+                    style={{
+                      width: '100%',
+                      height: 36,
+                      borderRadius: 8,
+                      border: fxEnabled ? `1.5px solid ${accent}` : '1px solid var(--border)',
+                      background: fxEnabled ? `${accent}18` : 'var(--bg-subtle)',
+                      color: fxEnabled ? accent : 'var(--text-secondary)',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      transition: 'all 150ms',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 28,
+                        height: 16,
+                        borderRadius: 8,
+                        background: fxEnabled ? accent : 'var(--border)',
+                        position: 'relative',
+                        transition: 'background 150ms',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: 2,
+                          left: fxEnabled ? 14 : 2,
+                          width: 12,
+                          height: 12,
+                          borderRadius: '50%',
+                          background: 'white',
+                          transition: 'left 150ms',
+                        }}
+                      />
+                    </div>
+                    {fxEnabled ? 'On — particles active' : 'Off — luxury default'}
+                  </button>
+                  <p style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 6, lineHeight: 1.5 }}>
+                    Controls apply to particles, accumulation, and season color below only while on.
+                  </p>
+                </div>
+
+                <PanelDivider />
 
                 {/* Month grid */}
                 <div>

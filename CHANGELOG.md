@@ -4,6 +4,23 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9 (Editorial Warmth Redesign)
+
+### feat: warm/editorial visual redesign of the marketing site
+- Installed and actually loaded `Instrument Serif` (previously referenced in `--font-display` since Phase 2 but never installed); applied to hero H1, all major section headings, and pull-quotes
+- New warm neutral palette (cream/parchment light mode, warm near-black dark mode) and a terracotta/bronze "luxury signature" accent replacing flat purple, via existing CSS custom property names — no component rewrites needed
+- New semantic `--color-success`/`--color-error` tokens replace ~10 hardcoded hex values in `ProblemSection.tsx`, `ContactForm.tsx`, `ProductPricing.tsx`, `ProductHero.tsx`
+- New `components/ui/GrainOverlay.tsx` and `components/ui/EditorialImage.tsx`; real curated photography (`lib/editorialImages.ts`, Unsplash) added to homepage hero, Problem section, testimonials, About hero, About team (new — was text-only), and product page hero
+- `ProductHero.tsx`'s `MockUI` redesigned with a photo backdrop and a live "Synced" pulse micro-interaction
+- `Footer.tsx` social icons: real SVGs replacing letter avatars; season easter-egg no longer defaults to "Winter" when data is absent
+- Scope: marketing site only (home, products, about, contact) — customer/admin portals untouched
+
+### feat: seasonal particle engine now optional, defaults off
+- `contexts/seasonal-fx-context.tsx` (new) + `lib/luxuryPalette.ts` (new): a zero-specificity `:where(:root)` CSS fallback supplies the luxury palette for all `--season-*` tokens whenever `data-season` is absent from `<html>`
+- Anti-FOUC script in `app/layout.tsx` strips season attributes before first paint unless `localStorage['seasonal-fx'] === 'on'` (mirrors the existing dark/light mode script)
+- `SeasonalEngine.tsx`, `LoadingScreen.tsx`, `SeasonAccentWord.tsx` all gate particle rendering / color blending / infection animation behind the FX-enabled state
+- Control added to the existing bottom-right `SeasonDevPanel` as an On/Off switch — no new UI surface
+
 ## 2026-05-17 — Phase 8b (Accessibility Audit)
 
 ### fix: restore focus-visible ring on all form inputs

@@ -43,7 +43,7 @@ function ProductsDropdown({ onClose }: { onClose: () => void }) {
         background: 'var(--bg-card)',
         border: '1px solid var(--border)',
         borderRadius: 'var(--radius-xl)',
-        boxShadow: '0 16px 48px rgba(0,0,0,0.16)',
+        boxShadow: '0 16px 48px rgba(22,19,15,0.18)',
         padding: '12px',
         zIndex: 200,
       }}
@@ -528,7 +528,7 @@ export default function Navbar() {
               style={{
                 position: 'fixed',
                 inset: 0,
-                background: 'rgba(0, 0, 0, 0.55)',
+                background: 'rgba(22, 19, 15, 0.55)',
                 backdropFilter: 'blur(6px)',
                 WebkitBackdropFilter: 'blur(6px)',
                 zIndex: 150,

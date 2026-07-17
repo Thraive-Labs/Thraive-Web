@@ -128,7 +128,7 @@ function CheckoutButton({
         {loading ? 'Redirecting...' : label}
       </button>
       {error && (
-        <p style={{ fontSize: 12, color: '#EF4444', marginTop: 6, textAlign: 'center' }}>{error}</p>
+        <p style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 6, textAlign: 'center' }}>{error}</p>
       )}
     </div>
   )
@@ -165,9 +165,10 @@ export default function ProductPricing({ product }: { product: ProductDetail }) 
           <h2
             id="pricing-heading"
             style={{
-              fontSize: 'clamp(28px, 4vw, 44px)',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(30px, 4.5vw, 48px)',
+              fontWeight: 400,
+              letterSpacing: '-0.01em',
               lineHeight: 1.15,
               color: 'var(--text-primary)',
             }}

@@ -2,22 +2,23 @@
 
 ## Visual Philosophy
 
-Calm. Modern. Alive. The website breathes with the seasons. Content is spacious. Typography does the heavy lifting. The seasonal engine provides the emotion — the layout provides the clarity.
-
-Never chaotic. Never empty. Guided storytelling through generous space and intentional motion.
+**Editorial Warmth** (as of Phase 9, 2026-07-18). Calm, spacious, and alive — but warm, human, and a little posh, not flat SaaS-purple. A serif display face carries every large headline and pull-quote; real photography (curated stock today, real company photography later — see Imagery below) carries the human warmth; a warm terracotta/bronze signature accent replaces the old flat purple as the default (non-seasonal) brand color. The seasonal particle engine is still the site's signature detail, but it's now optional — off by default while this direction is being evaluated, toggleable from the dev panel (see Seasonal FX below). Content is spacious. Typography does the heavy lifting. Never chaotic. Never empty. Never overloaded with images — most sections stay typography/icon-only; photography appears only at a handful of deliberate, high-impact moments.
 
 ---
 
 ## Typography
 
 ```
-Display font:  Cal Sans (headings, hero)
-               Fallback: Instrument Serif, Georgia, serif
+Display font:  Instrument Serif (hero H1, major section headings, pull-quotes)
+               Single weight (400) — never force fontWeight: 700 on it, browsers
+               fake-bold it and it looks wrong. Fallback: Georgia, serif.
 Body font:     Inter (all body text, UI)
                Fallback: -apple-system, sans-serif
 Mono font:     JetBrains Mono (prices, version numbers, code)
                Fallback: Fira Code, monospace
 ```
+
+Loaded via `@fontsource/instrument-serif` in `app/layout.tsx` (self-hosted, same pattern as Inter/JetBrains Mono). Apply with `fontFamily: 'var(--font-display)'` — do not hardcode the font name in components.
 
 ### Type Scale
 
@@ -109,6 +110,41 @@ backdrop-filter: var(--glass-blur)
 border: var(--glass-border)
 border-radius: var(--radius-xl)
 box-shadow: 0 8px 32px rgba(0,0,0,0.08)
+```
+
+### Editorial Image
+
+```tsx
+// components/ui/EditorialImage.tsx — the ONLY way real photography should
+// appear on the site. Wraps next/image with a shared warm color-grade
+// filter, rounded frame, soft shadow, and grain, so every photo (curated
+// stock today, real company photography later) reads as one deliberate
+// art direction instead of assorted stock images.
+
+<EditorialImage
+  src={EDITORIAL_IMAGES.homeHero.src}
+  alt={EDITORIAL_IMAGES.homeHero.alt}
+  aspectRatio="4 / 5"
+  priority        // only on above-the-fold hero images
+  sizes="(max-width: 900px) 90vw, 480px"
+/>
+
+Filter: sepia(8%) saturate(108%) contrast(101%) brightness(101%)
+Vignette: radial-gradient warm-ink at 18% opacity, deepens toward edges
+Grain: same SVG turbulence texture as the global GrainOverlay, layered at 6% opacity
+```
+
+Image URLs live in `lib/editorialImages.ts`, one named constant per slot (`homeHero`, `homeProblem`, `testimonials[]`, `aboutHero`, `team[]`, `productHeroBackdrop`). Swap a constant to replace stock photography with real company photography — no component changes needed.
+
+Used deliberately, not everywhere: homepage hero, Problem section, testimonial avatars, About hero, About team, product page hero. Products grid, Values, Stats, How It Works, FAQ, Pricing, and Closing CTA stay icon/typography-only — don't add images to sections that already work as functional/wayfinding UI, it reads as clutter.
+
+### Grain Overlay
+
+```tsx
+// components/ui/GrainOverlay.tsx — mounted once in app/layout.tsx.
+// Fixed, full-viewport, static SVG noise at ~3.5% opacity, mix-blend-mode: overlay.
+// The one always-on texture cue for a tangible/posh surface. Static image,
+// not canvas — no perf cost, no prefers-reduced-motion handling needed.
 ```
 
 ### Section Label
@@ -313,6 +349,38 @@ const itemVariants = {
 // CSS: * { transition: background-color 300ms, border-color 300ms, color 300ms; }
 // Apply only during toggle, remove after to avoid unwanted transitions
 ```
+
+---
+
+## Seasonal FX (toggleable, default off)
+
+As of Phase 9, the seasonal particle/color engine is optional and **off by default** while the Editorial Warmth direction is being evaluated. This does not relax CLAUDE.md rules 1-4 (the engine itself is unchanged and still non-negotiable) — it adds a demo-mode preference on top.
+
+```
+Default state: OFF
+  --season-* tokens resolve to the fixed luxury palette (lib/luxuryPalette.ts)
+  via a zero-specificity :where(:root) fallback in globals.css.
+  No particles, no accumulation, no word-infection animation.
+
+Enabled state: ON
+  Live seasonal engine behaves exactly as before (real season/time-of-day
+  color blending, particles, accumulation, word infection).
+
+Control:
+  Bottom-right SeasonDevPanel — "Seasonal FX" On/Off switch, persists to
+  localStorage['seasonal-fx']. Not a public-facing toggle.
+
+Mechanism:
+  A blocking anti-FOUC script in app/layout.tsx (same pattern as the
+  dark/light THEME_SCRIPT) strips data-season/data-secondary-season/
+  data-season-blend/data-time from <html> before first paint unless
+  localStorage says 'on'. contexts/seasonal-fx-context.tsx tracks the
+  state client-side and dispatches a 'seasonal-fx-change' event that
+  SeasonalEngine.tsx listens for to mount/unmount ParticleCanvas and
+  AccumulationCanvas and to swap the inline --season-* vars live.
+```
+
+When adding new seasonal-aware UI, read `var(--season-*)` tokens as usual — they resolve correctly whether FX is on or off. Don't gate new components on the FX state directly unless they render particles/canvas themselves.
 
 ---
 

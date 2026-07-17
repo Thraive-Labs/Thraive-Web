@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useLoading } from '@/contexts/loading-context'
 import SeasonAccentWord from './SeasonAccentWord'
+import EditorialImage from '@/components/ui/EditorialImage'
+import { EDITORIAL_IMAGES } from '@/lib/editorialImages'
 
 const HEADLINE_WORDS = [
   { text: 'Your', accent: false },
@@ -114,165 +116,191 @@ export default function HeroSection() {
 
       {/* Content */}
       <div
+        className="hero-split"
         style={{
           position: 'relative',
           zIndex: 5,
-          textAlign: 'center',
-          padding: '120px 24px',
-          maxWidth: 720,
           width: '100%',
+          maxWidth: 1200,
+          margin: '0 auto',
+          padding: '120px 24px',
+          display: 'grid',
+          gridTemplateColumns: '1.05fr 0.95fr',
+          gap: 56,
+          alignItems: 'center',
+          textAlign: 'left',
         }}
       >
-        {/* Badge */}
-        {started && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
+        <div>
+          {/* Badge */}
+          {started && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '5px 12px',
+                borderRadius: 'var(--radius-full)',
+                border: '1px solid var(--season-card-border)',
+                background: 'var(--season-glow-soft)',
+                marginBottom: 28,
+              }}
+            >
+              <span style={{ fontSize: 12, color: 'var(--season-accent)', fontWeight: 600 }}>
+                &#10022;
+              </span>
+              <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>
+                6 products &middot; Built in Sri Lanka
+              </span>
+            </motion.div>
+          )}
+
+          {/* Headline */}
+          <motion.h1
+            id="hero-heading"
+            variants={containerVariants}
+            initial="hidden"
+            animate={started ? 'visible' : 'hidden'}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '5px 12px',
-              borderRadius: 'var(--radius-full)',
-              border: '1px solid var(--season-card-border)',
-              background: 'var(--season-glow-soft)',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(44px, 6vw, 72px)',
+              fontWeight: 400,
+              letterSpacing: '-0.02em',
+              lineHeight: 1.05,
               marginBottom: 28,
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0 14px',
             }}
           >
-            <span style={{ fontSize: 12, color: 'var(--season-accent)', fontWeight: 600 }}>
-              &#10022;
-            </span>
-            <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>
-              6 products &middot; Built in Sri Lanka
-            </span>
-          </motion.div>
-        )}
+            {HEADLINE_WORDS.map((w, i) => (
+              <motion.span
+                key={i}
+                variants={wordVariants}
+                style={{
+                  display: 'inline-block',
+                  color: w.accent ? undefined : 'var(--text-primary)',
+                }}
+              >
+                {w.accent
+                  ? <SeasonAccentWord>{w.text}</SeasonAccentWord>
+                  : w.text}
+              </motion.span>
+            ))}
+          </motion.h1>
 
-        {/* Headline */}
-        <motion.h1
-          id="hero-heading"
-          variants={containerVariants}
-          initial="hidden"
-          animate={started ? 'visible' : 'hidden'}
-          style={{
-            fontSize: 'clamp(48px, 8vw, 80px)',
-            fontWeight: 700,
-            letterSpacing: '-0.04em',
-            lineHeight: 1.05,
-            marginBottom: 28,
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '0 16px',
-          }}
-        >
-          {HEADLINE_WORDS.map((w, i) => (
-            <motion.span
-              key={i}
-              variants={wordVariants}
+          {/* Subtext */}
+          {started && (
+            <motion.p
+              custom={0.6}
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
               style={{
-                display: 'inline-block',
-                color: w.accent ? undefined : 'var(--text-primary)',
+                fontSize: 'clamp(16px, 2vw, 19px)',
+                lineHeight: 1.65,
+                color: 'var(--text-secondary)',
+                maxWidth: 480,
+                margin: '0 0 36px',
               }}
             >
-              {w.accent
-                ? <SeasonAccentWord>{w.text}</SeasonAccentWord>
-                : w.text}
-            </motion.span>
-          ))}
-        </motion.h1>
+              We build software for the businesses that keep Sri Lanka running &mdash; restaurants,
+              pharmacies, shops, and more. Offline-first. Built for this market.
+            </motion.p>
+          )}
 
-        {/* Subtext */}
-        {started && (
-          <motion.p
-            custom={0.6}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            style={{
-              fontSize: 'clamp(16px, 2vw, 19px)',
-              lineHeight: 1.65,
-              color: 'var(--text-secondary)',
-              maxWidth: 540,
-              margin: '0 auto 36px',
-            }}
-          >
-            We build software for the businesses that keep Sri Lanka running &mdash; restaurants,
-            pharmacies, shops, and more. Offline-first. Built for this market.
-          </motion.p>
-        )}
+          {/* CTA buttons */}
+          {started && (
+            <motion.div
+              custom={0.8}
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
+            >
+              <Link
+                href="/products"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  height: 48,
+                  padding: '0 24px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--season-btn-bg)',
+                  color: 'white',
+                  fontSize: 15,
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  transition: 'background 150ms, transform 150ms',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = 'var(--season-btn-hover)'
+                  el.style.transform = 'translateY(-1px)'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = 'var(--season-btn-bg)'
+                  el.style.transform = ''
+                }}
+              >
+                Explore products
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+              <a
+                href="/about"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  height: 48,
+                  padding: '0 24px',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border)',
+                  background: 'transparent',
+                  color: 'var(--text-secondary)',
+                  fontSize: 15,
+                  fontWeight: 500,
+                  textDecoration: 'none',
+                  transition: 'border-color 150ms, color 150ms',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.borderColor = 'var(--season-ambient)'
+                  el.style.color = 'var(--text-primary)'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.borderColor = 'var(--border)'
+                  el.style.color = 'var(--text-secondary)'
+                }}
+              >
+                Learn more
+              </a>
+            </motion.div>
+          )}
+        </div>
 
-        {/* CTA buttons */}
+        {/* Editorial photo */}
         {started && (
           <motion.div
-            custom={0.8}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}
+            className="hero-split-image"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <Link
-              href="/products"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                height: 48,
-                padding: '0 24px',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--season-btn-bg)',
-                color: 'white',
-                fontSize: 15,
-                fontWeight: 600,
-                textDecoration: 'none',
-                transition: 'background 150ms, transform 150ms',
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement
-                el.style.background = 'var(--season-btn-hover)'
-                el.style.transform = 'translateY(-1px)'
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement
-                el.style.background = 'var(--season-btn-bg)'
-                el.style.transform = ''
-              }}
-            >
-              Explore products
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-            <a
-              href="/about"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                height: 48,
-                padding: '0 24px',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border)',
-                background: 'transparent',
-                color: 'var(--text-secondary)',
-                fontSize: 15,
-                fontWeight: 500,
-                textDecoration: 'none',
-                transition: 'border-color 150ms, color 150ms',
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement
-                el.style.borderColor = 'var(--season-ambient)'
-                el.style.color = 'var(--text-primary)'
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement
-                el.style.borderColor = 'var(--border)'
-                el.style.color = 'var(--text-secondary)'
-              }}
-            >
-              Learn more
-            </a>
+            <EditorialImage
+              src={EDITORIAL_IMAGES.homeHero.src}
+              alt={EDITORIAL_IMAGES.homeHero.alt}
+              aspectRatio="4 / 5"
+              priority
+              sizes="(max-width: 900px) 90vw, 480px"
+            />
           </motion.div>
         )}
       </div>

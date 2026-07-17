@@ -8,31 +8,34 @@ Full spec for every page. Start with the homepage.
 
 The homepage tells a story. Each section answers one question in the visitor's mind. It is calm, spacious, and guided — never chaotic, never empty.
 
-### Section 1 — Hero
+### Section 1 — Hero (updated Phase 9 — Editorial Warmth)
 
 ```
 Full viewport height (min 100svh)
-Centered content, generous vertical padding
+Asymmetric split on desktop: copy column left (~1.05fr), editorial photo
+right (~0.95fr, aspect 4:5, EditorialImage). Stacks to a single centered
+column on mobile (.hero-split / .hero-split-image CSS helpers).
 
 Background:
-  Seasonal particles falling across full viewport
-  Aura threads visible in hero area (15% opacity max)
-  Radial gradient: season ambient color at 8% from top-center fading to transparent
-  Time-of-day overlay applied as a color tint on top
+  Seasonal particles falling across full viewport — ONLY when Seasonal FX
+  is enabled (off by default, see design-system.md). Radial gradient:
+  season ambient color at 8% from top-center fading to transparent, always
+  present regardless of FX state (uses the luxury default when off).
 
-Content (centered, max-width 720px):
+Content (left column, text-align left on desktop):
 
   [pill badge — animated in first]
   ✦ 6 products · Built in Sri Lanka
 
-  [hero headline — display font, large]
-  "Your business,
-   always running."
-   ← "always running." in season accent color
+  [hero headline — Instrument Serif, weight 400, large]
+  "Your business, built to
+   thraive."
+   ← "thraive." in season accent color (luxury terracotta by default)
 
-  [subtext — body font, text-secondary, max-width 540px]
-  [placeholder text — copywriter will fill this]
-  [3-4 sentences guiding visitor into the story]
+  [subtext — body font, text-secondary, max-width 480px]
+  We build software for the businesses that keep Sri Lanka running —
+  restaurants, pharmacies, shops, and more. Offline-first. Built for
+  this market.
 
   [CTA buttons]
   [Explore products →]    [Learn more]
@@ -40,6 +43,9 @@ Content (centered, max-width 720px):
 
   [scroll indicator — subtle animated arrow at bottom of hero]
   Gentle bounce animation, fades out on scroll
+
+Right column: EditorialImage, warm-toned photo of a small restaurant/
+cafe interior, priority-loaded (above the fold).
 ```
 
 Animation sequence (on load, after loading screen exits):
@@ -113,11 +119,12 @@ Left column:
   power cuts, unreliable internet, software not built for local context,
   businesses running on paper and WhatsApp
 
-Right column:
-  [Visual element — illustrated or abstract]
-  Could be: a simple animation showing a power cut icon →
-  a spinning loading icon → a red X → replaced by Thraive logo
-  Or: a simple graphic showing the contrast before/after
+Right column (updated Phase 9): a stacked column —
+  1. EditorialImage — a real photo of a busy, cluttered shop counter
+     (warm, candid, not staged)
+  2. ComparisonCard — the before/after craft piece already built
+     (kept as-is; it's a genuine UI craft moment, not a fake mockup —
+     just re-themed onto --color-success/--color-error tokens)
 
 This section should make the visitor feel understood.
 Not lectured to — seen.
@@ -211,15 +218,16 @@ Three testimonial cards in a row (desktop), 1 column (mobile):
 Each card (glass card style):
   [large quote mark — brand color, 48px]
   [quote text — placeholder, italic]
-  [avatar circle — placeholder grey, 40px]
+  [avatar photo — real photo, 44px circle, EDITORIAL_IMAGES.testimonials[i]]
   [name — placeholder]
   [business type — placeholder, muted]
   [location — placeholder, muted]
 
 Placeholder state (until real testimonials):
-  Cards are visually complete but content is clearly placeholder
-  Do not add a "coming soon" note — just design them to accept real content
-  When real testimonials arrive: swap text content only, no redesign needed
+  Cards are visually complete but content is clearly placeholder — as of
+  Phase 9 this includes real (stock) photography for the avatars, not just
+  text. Do not add a "coming soon" note — just design them to accept real
+  content. When real testimonials arrive: swap text + photo, no redesign needed.
 ```
 
 ### Section 9 — Closing CTA
@@ -258,7 +266,11 @@ Each product has its own dedicated landing page. Same seasonal engine, same navb
 ### Template Structure
 
 ```
-Hero:         Product name, tagline, hero visual (screenshot/mockup), CTA
+Hero:         Product name, tagline, CTA. Right column (updated Phase 9):
+              layered composition — a photo backdrop (EditorialImage,
+              device-on-desk style) behind the MockUI craft mockup,
+              offset so both are visible. MockUI includes a small live
+              "Synced" pulse micro-interaction, not just static bars.
 Problem:      What problem this solves for this specific customer type
 Features:     Key features — 4-6 blocks with icon, title, description
 How it works: Step by step for this specific product
@@ -274,10 +286,17 @@ Each product page inherits the homepage visual language but with the product's a
 ## About Page
 
 ```
-Hero: Company story — who we are, why we exist, where we're based
-Team: Founder section (placeholder ready)
+Hero: Company story — who we are, why we exist, where we're based.
+      Updated Phase 9: asymmetric split with an editorial photo
+      (Sri Lankan street/market context), same .hero-split pattern as
+      the homepage hero.
 Mission: 2-3 paragraphs about the company's mission
 Values: Same 3 values as homepage but expanded
+Team: Updated Phase 9 — a real photo grid (3 members), role-based labels
+      ("Founder & Engineering", "Product & Design", "Support &
+      Operations") rather than fabricated personal names, since the
+      photos are curated stock until real team photography exists.
+      Swap photo + role + note per person when real team info is ready.
 Contact: Link to contact page
 ```
 

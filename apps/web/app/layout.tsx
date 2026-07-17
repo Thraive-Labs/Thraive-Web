@@ -5,13 +5,16 @@ import '@fontsource/inter/600.css'
 import '@fontsource/inter/700.css'
 import '@fontsource/jetbrains-mono/400.css'
 import '@fontsource/jetbrains-mono/500.css'
+import '@fontsource/instrument-serif/400.css'
+import '@fontsource/instrument-serif/400-italic.css'
 import '../styles/globals.css'
 import { getSeasonState } from '@/lib/seasonal'
-import { getInterpolatedColorVars } from '@/lib/seasonColors'
 import { LoadingProvider } from '@/contexts/loading-context'
 import { ThemeProvider } from '@/contexts/theme-context'
+import { SeasonalFxProvider } from '@/contexts/seasonal-fx-context'
 import SeasonalEngine from '@/components/seasonal/SeasonalEngine'
 import SeasonDevPanel from '@/components/dev/SeasonDevPanel'
+import GrainOverlay from '@/components/ui/GrainOverlay'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://thraive.com'
 
@@ -41,6 +44,12 @@ export const metadata: Metadata = {
 
 const THEME_SCRIPT = `try{var s=localStorage.getItem('theme');var m=s==='dark'||s==='light'?s:window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-mode',m);}catch(e){document.documentElement.setAttribute('data-mode','light');}`
 
+// Seasonal FX defaults to OFF (Editorial Warmth luxury palette) while the redesign
+// is being evaluated in demo mode. Strips the server-rendered season attributes
+// before first paint when the user hasn't explicitly turned FX on, so the
+// zero-specificity luxury fallback in globals.css applies with no flash.
+const SEASONAL_FX_SCRIPT = `try{var f=localStorage.getItem('seasonal-fx');var on=f==='on';document.documentElement.setAttribute('data-seasonal-fx',on?'on':'off');if(!on){document.documentElement.removeAttribute('data-season');document.documentElement.removeAttribute('data-secondary-season');document.documentElement.removeAttribute('data-season-blend');document.documentElement.removeAttribute('data-time');}}catch(e){document.documentElement.setAttribute('data-seasonal-fx','off');}`
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,7 +57,6 @@ export default function RootLayout({
 }>) {
   const now = new Date()
   const state = getSeasonState(now, true)
-  const colorVars = getInterpolatedColorVars(state.primary, state.secondary, state.colorBlend, state.darkMode)
 
   return (
     <html
@@ -59,18 +67,21 @@ export default function RootLayout({
       data-season-blend={state.blend.toFixed(3)}
       data-time={state.timeOfDay}
       data-mode="light"
-      style={colorVars as React.CSSProperties}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: SEASONAL_FX_SCRIPT }} />
       </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
-          <LoadingProvider>
-            <SeasonalEngine seasonState={state} />
-            {children}
-            <SeasonDevPanel />
-          </LoadingProvider>
+          <SeasonalFxProvider>
+            <LoadingProvider>
+              <SeasonalEngine seasonState={state} />
+              {children}
+              <GrainOverlay />
+              <SeasonDevPanel />
+            </LoadingProvider>
+          </SeasonalFxProvider>
         </ThemeProvider>
       </body>
     </html>
