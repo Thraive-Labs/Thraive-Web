@@ -4,7 +4,21 @@
 
 ## Current State
 
-Marketing site redesigned to "Editorial Warmth" — see Phase 9 through 9d below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+Marketing site redesigned to "Editorial Warmth" — see Phase 9 through 9e below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+
+## Phase 9e — Hero: real photo restored, first-paint cropping fixed (2026-07-18)
+
+Feedback: wanted an actual photo back (not a pure product mockup), and the
+layout let the visual spill past the bottom of the viewport — looked cut in
+half on first paint.
+
+Root cause: text stacked above a large visual meant total content height
+could exceed one screen's worth of space with no indication there was more
+below. Fixed by returning to a side-by-side (text | photo) layout and
+explicitly capping the photo's height (`min(58svh, 520px)`) so the pair can
+never require more vertical space than a typical viewport provides. Verified
+at 1440x900, 1440x800, 1280x720, and mobile 390x844 — nothing clipped at any
+size. `DashboardMockup` (from 9d) removed, no longer used.
 
 ## Phase 9d — Hero: product-led not photo-led; images restored where asked (2026-07-18)
 

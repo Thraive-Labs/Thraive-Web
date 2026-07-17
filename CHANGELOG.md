@@ -4,6 +4,25 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9e (Hero: real photo back, first-paint cropping fixed)
+
+Feedback: still not right — wanted an actual photo (not a pure product mockup),
+and the layout let the visual spill past the bottom of the viewport so it
+looked cut in half on first paint.
+
+### fix: hero — real photo, height-capped so nothing overflows the first viewport
+- Root cause of the cropping: text stacked above a large visual meant total
+  content height could exceed one screen's worth of space, so the visual got
+  sliced by the fold with no visual indication there was more below
+- Fixed by going back to a side-by-side layout (text | photo) instead of
+  stacking, and capping the photo's height explicitly (`height: min(58svh, 520px)`)
+  so the pair can never require more vertical space than a typical viewport
+  provides — verified at 1440x900, 1440x800, 1280x720, and mobile 390x844,
+  nothing clipped at any size
+- Removed `DashboardMockup` (introduced in 9d) entirely — no longer used
+- `lib/editorialImages.ts`: `homeHero` restored (same photo as the original
+  Phase 9 hero, now presented in a contained frame instead of full-bleed)
+
 ## 2026-07-18 — Phase 9d (Hero: product-led, not photo-led; images restored where asked)
 
 Feedback: the full-bleed photo hero read as dated, and the Problem section's
