@@ -1,80 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLoading } from '@/contexts/loading-context'
 import SeasonAccentWord from './SeasonAccentWord'
-import EditorialImage from '@/components/ui/EditorialImage'
 import { EDITORIAL_IMAGES } from '@/lib/editorialImages'
-
-// Subtle blueprint grid — the "precise/technical" cue behind the hero,
-// faded toward the edges so it reads as texture, not a pattern.
-function GridBackdrop() {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 0,
-        backgroundImage:
-          'linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)',
-        backgroundSize: '64px 64px',
-        opacity: 0.5,
-        maskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 40%, transparent 100%)',
-        WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 40%, transparent 100%)',
-      }}
-    />
-  )
-}
-
-// Floating glass chip that overlaps the hero photo's corner — a small,
-// tasteful technical/craft flourish (live-feeling status, not decorative).
-function StatusChip() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.5, delay: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-      style={{
-        position: 'absolute',
-        left: -20,
-        bottom: -20,
-        zIndex: 2,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
-        padding: '12px 16px',
-        borderRadius: 'var(--radius-lg)',
-        background: 'var(--bg-glass)',
-        backdropFilter: 'var(--glass-blur)',
-        WebkitBackdropFilter: 'var(--glass-blur)',
-        border: 'var(--glass-border)',
-        boxShadow: '0 16px 40px -12px rgba(6,9,15,0.35)',
-      }}
-    >
-      <div
-        style={{
-          width: 8,
-          height: 8,
-          borderRadius: '50%',
-          background: 'var(--color-success)',
-          animation: 'soft-pulse 1.8s ease-in-out infinite',
-          flexShrink: 0,
-        }}
-      />
-      <div>
-        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-          Running offline
-        </div>
-        <div style={{ fontSize: 11, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-          6 products &middot; synced
-        </div>
-      </div>
-    </motion.div>
-  )
-}
 
 const HEADLINE_WORDS = [
   { text: 'Your', accent: false },
@@ -101,15 +33,16 @@ function ScrollIndicator() {
       animate={{ opacity: 1 }}
       style={{
         position: 'absolute',
-        bottom: 40,
+        bottom: 28,
         left: '50%',
         transform: 'translateX(-50%)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         gap: 6,
-        color: 'var(--text-muted)',
+        color: 'rgba(255,255,255,0.7)',
         cursor: 'default',
+        zIndex: 5,
       }}
       aria-hidden="true"
     >
@@ -128,30 +61,7 @@ function ScrollIndicator() {
 export default function HeroSection() {
   const { isLoaded } = useLoading()
   const [started, setStarted] = useState(false)
-  const sectionRef = useRef<HTMLElement>(null)
   const prefersReduced = useReducedMotion()
-
-  // Subtle mouse-follow parallax on the hero photo — desktop only (no
-  // mousemove on touch), skipped entirely under prefers-reduced-motion.
-  const mvX = useMotionValue(0)
-  const mvY = useMotionValue(0)
-  const springX = useSpring(mvX, { stiffness: 80, damping: 20, mass: 0.6 })
-  const springY = useSpring(mvY, { stiffness: 80, damping: 20, mass: 0.6 })
-  const imageX = useTransform(springX, [-0.5, 0.5], [-10, 10])
-  const imageY = useTransform(springY, [-0.5, 0.5], [-8, 8])
-
-  useEffect(() => {
-    if (prefersReduced) return
-    const el = sectionRef.current
-    if (!el) return
-    function onMove(e: MouseEvent) {
-      const rect = el!.getBoundingClientRect()
-      mvX.set((e.clientX - rect.left) / rect.width - 0.5)
-      mvY.set((e.clientY - rect.top) / rect.height - 0.5)
-    }
-    el.addEventListener('mousemove', onMove)
-    return () => el.removeEventListener('mousemove', onMove)
-  }, [prefersReduced, mvX, mvY])
 
   useEffect(() => {
     if (isLoaded) {
@@ -179,54 +89,73 @@ export default function HeroSection() {
 
   return (
     <section
-      ref={sectionRef}
       style={{
         position: 'relative',
         minHeight: '100svh',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: 'flex-end',
         overflow: 'hidden',
+        background: '#05070C',
       }}
       aria-labelledby="hero-heading"
     >
-      <GridBackdrop />
-
-      {/* Background radial gradient */}
-      {started && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'radial-gradient(ellipse 70% 50% at 50% 0%, var(--season-glow), transparent 70%)',
-            zIndex: 0,
-          }}
+      {/* Full-bleed photo, slow Ken Burns zoom */}
+      <motion.div
+        aria-hidden="true"
+        initial={{ scale: 1 }}
+        animate={{ scale: prefersReduced ? 1 : 1.08 }}
+        transition={{ duration: 24, ease: 'linear' }}
+        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+      >
+        <Image
+          src={EDITORIAL_IMAGES.homeHero.src}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: 'cover' }}
         />
-      )}
+      </motion.div>
+
+      {/* Technical grid texture over the photo */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1,
+          backgroundImage:
+            'linear-gradient(to right, rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.12) 1px, transparent 1px)',
+          backgroundSize: '56px 56px',
+          maskImage: 'linear-gradient(to bottom, black 0%, transparent 65%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 65%)',
+        }}
+      />
+
+      {/* Scrim — dark at the bottom for text legibility, tinted overall */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 2,
+          background:
+            'linear-gradient(to top, rgba(5,7,12,0.92) 0%, rgba(5,7,12,0.55) 38%, rgba(5,7,12,0.25) 65%, rgba(5,7,12,0.15) 100%)',
+        }}
+      />
 
       {/* Content */}
       <div
-        className="hero-split"
         style={{
           position: 'relative',
           zIndex: 5,
           width: '100%',
           maxWidth: 1200,
           margin: '0 auto',
-          padding: '120px 24px',
-          display: 'grid',
-          gridTemplateColumns: '1.05fr 0.95fr',
-          gap: 56,
-          alignItems: 'center',
-          textAlign: 'left',
+          padding: '160px 24px 120px',
         }}
       >
-        <div>
+        <div style={{ maxWidth: 720 }}>
           {/* Badge */}
           {started && (
             <motion.div
@@ -236,18 +165,27 @@ export default function HeroSection() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 6,
-                padding: '5px 12px',
+                gap: 8,
+                padding: '6px 14px',
                 borderRadius: 'var(--radius-full)',
-                border: '1px solid var(--season-card-border)',
-                background: 'var(--season-glow-soft)',
+                border: '1px solid rgba(255,255,255,0.22)',
+                background: 'rgba(255,255,255,0.08)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
                 marginBottom: 28,
               }}
             >
-              <span style={{ fontSize: 12, color: 'var(--season-accent)', fontWeight: 600 }}>
-                &#10022;
-              </span>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500 }}>
+              <div
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: 'var(--color-success)',
+                  animation: 'soft-pulse 1.8s ease-in-out infinite',
+                  flexShrink: 0,
+                }}
+              />
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.9)', fontWeight: 500 }}>
                 6 products &middot; Built in Sri Lanka
               </span>
             </motion.div>
@@ -261,14 +199,14 @@ export default function HeroSection() {
             animate={started ? 'visible' : 'hidden'}
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(44px, 6vw, 72px)',
+              fontSize: 'clamp(48px, 7.5vw, 96px)',
               fontWeight: 400,
               letterSpacing: '-0.02em',
-              lineHeight: 1.05,
+              lineHeight: 1.02,
               marginBottom: 28,
               display: 'flex',
               flexWrap: 'wrap',
-              gap: '0 14px',
+              gap: '0 16px',
             }}
           >
             {HEADLINE_WORDS.map((w, i) => (
@@ -277,7 +215,7 @@ export default function HeroSection() {
                 variants={wordVariants}
                 style={{
                   display: 'inline-block',
-                  color: w.accent ? undefined : 'var(--text-primary)',
+                  color: w.accent ? undefined : '#FFFFFF',
                 }}
               >
                 {w.accent
@@ -297,9 +235,9 @@ export default function HeroSection() {
               style={{
                 fontSize: 'clamp(16px, 2vw, 19px)',
                 lineHeight: 1.65,
-                color: 'var(--text-secondary)',
-                maxWidth: 480,
-                margin: '0 0 36px',
+                color: 'rgba(255,255,255,0.72)',
+                maxWidth: 520,
+                margin: '0 0 40px',
               }}
             >
               We build software for the businesses that keep Sri Lanka running &mdash; restaurants,
@@ -322,25 +260,25 @@ export default function HeroSection() {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: 8,
-                  height: 48,
-                  padding: '0 24px',
+                  height: 50,
+                  padding: '0 26px',
                   borderRadius: 'var(--radius-md)',
-                  background: 'var(--season-btn-bg)',
-                  color: 'white',
+                  background: '#FFFFFF',
+                  color: '#05070C',
                   fontSize: 15,
                   fontWeight: 600,
                   textDecoration: 'none',
-                  transition: 'background 150ms, transform 150ms',
+                  transition: 'transform 150ms, opacity 150ms',
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement
-                  el.style.background = 'var(--season-btn-hover)'
                   el.style.transform = 'translateY(-1px)'
+                  el.style.opacity = '0.92'
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement
-                  el.style.background = 'var(--season-btn-bg)'
                   el.style.transform = ''
+                  el.style.opacity = '1'
                 }}
               >
                 Explore products
@@ -353,26 +291,26 @@ export default function HeroSection() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  height: 48,
-                  padding: '0 24px',
+                  height: 50,
+                  padding: '0 26px',
                   borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border)',
+                  border: '1px solid rgba(255,255,255,0.35)',
                   background: 'transparent',
-                  color: 'var(--text-secondary)',
+                  color: '#FFFFFF',
                   fontSize: 15,
                   fontWeight: 500,
                   textDecoration: 'none',
-                  transition: 'border-color 150ms, color 150ms',
+                  transition: 'border-color 150ms, background 150ms',
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement
-                  el.style.borderColor = 'var(--season-ambient)'
-                  el.style.color = 'var(--text-primary)'
+                  el.style.borderColor = 'rgba(255,255,255,0.7)'
+                  el.style.background = 'rgba(255,255,255,0.08)'
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement
-                  el.style.borderColor = 'var(--border)'
-                  el.style.color = 'var(--text-secondary)'
+                  el.style.borderColor = 'rgba(255,255,255,0.35)'
+                  el.style.background = 'transparent'
                 }}
               >
                 Learn more
@@ -380,26 +318,6 @@ export default function HeroSection() {
             </motion.div>
           )}
         </div>
-
-        {/* Editorial photo */}
-        {started && (
-          <motion.div
-            className="hero-split-image"
-            initial={{ opacity: 0, y: 20, rotate: 0 }}
-            animate={{ opacity: 1, y: 0, rotate: -1.5 }}
-            transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            style={{ position: 'relative', x: imageX, y: imageY }}
-          >
-            <EditorialImage
-              src={EDITORIAL_IMAGES.homeHero.src}
-              alt={EDITORIAL_IMAGES.homeHero.alt}
-              aspectRatio="4 / 5"
-              priority
-              sizes="(max-width: 900px) 90vw, 480px"
-            />
-            <StatusChip />
-          </motion.div>
-        )}
       </div>
 
       {/* Scroll indicator */}

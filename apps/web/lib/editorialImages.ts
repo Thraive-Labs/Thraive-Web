@@ -7,10 +7,6 @@ export const EDITORIAL_IMAGES = {
     src: 'https://images.unsplash.com/photo-1753791271758-42502f800d8f',
     alt: 'Warm sunlight streaming into a small restaurant dining room',
   },
-  homeProblem: {
-    src: 'https://images.unsplash.com/photo-1781883377959-cbccba3ba746',
-    alt: 'Two people working behind a busy, cluttered shop counter',
-  },
   aboutHero: {
     src: 'https://images.unsplash.com/photo-1581420515590-cee76de451b5',
     alt: 'People browsing a fruit stand on a Sri Lankan street market',

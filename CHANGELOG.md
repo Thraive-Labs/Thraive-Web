@@ -4,6 +4,32 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9c (Hero + Problem section rebuilt)
+
+Feedback: the split text/photo hero composition itself wasn't working, and the
+Problem section's photo-plus-comparison-card concept was wrong entirely — not
+just unbalanced.
+
+### feat: hero rebuilt as full-bleed cinematic composition
+- Replaced the two-column split with one full-viewport photo background, a
+  bottom-anchored content block, and a dark gradient scrim for legibility
+  regardless of theme (same "always-dark" idea as the closing CTA band)
+- Slow continuous Ken Burns zoom on the photo (respects `prefers-reduced-motion`)
+- Subtle technical grid texture laid directly over the photo, fading toward the bottom
+- Removed the separate floating "status chip" concept (was tied to the old
+  split-card layout) — a small pulse dot lives in the badge pill instead
+
+### feat: Problem section rebuilt as a working animated demo, not a photo
+- Dropped the photo + comparison-card concept entirely
+- New `PowerCutDemo`: a real, self-contained UI component (not a stock photo)
+  that plays through a power cut once when scrolled into view — the toolbar
+  status flips "Offline" → "Synced", an overlay with a spinner appears and
+  clears, and the order rows animate from dimmed to fully active
+- This is a genuine technical/craft showcase (real interaction logic) rather
+  than art direction, and it naturally height-matches the left column since
+  it's one compact card instead of a photo-plus-card stack
+- Fixed a `react-hooks/set-state-in-effect` lint error surfaced by the reduced-motion branch (deferred via the timeout instead of a synchronous `setState`)
+
 ## 2026-07-18 — Phase 9b (Redesign feedback pass)
 
 ### fix: palette feedback — human warmth from photography, not brown chrome

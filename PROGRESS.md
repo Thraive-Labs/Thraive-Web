@@ -4,7 +4,17 @@
 
 ## Current State
 
-Marketing site redesigned to "Editorial Warmth" — see Phase 9 and the Phase 9b feedback pass below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+Marketing site redesigned to "Editorial Warmth" — see Phase 9, 9b, and 9c below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+
+## Phase 9c — Hero + Problem section rebuilt (2026-07-18)
+
+Feedback: the hero's split text/photo layout and the Problem section's photo-plus-comparison-card concept weren't working — not just tuning issues, wrong approaches entirely.
+
+- **Hero** (`components/home/HeroSection.tsx`): rebuilt as one full-viewport photo background with a dark gradient scrim (always-dark-on-photo, like the closing CTA band), bottom-anchored bold typography, a slow Ken Burns zoom, and a technical grid texture over the photo. No more left/right split.
+- **Problem section** (`components/home/ProblemSection.tsx`): dropped the photo entirely. New `PowerCutDemo` component — a real working UI demo (not art direction) that plays through a power cut once when scrolled into view: toolbar status flips Offline → Synced, a spinner overlay clears, order rows animate from dimmed to active. Naturally height-matches the left column since it's one compact card, not a photo-plus-card stack.
+- `lib/editorialImages.ts`: removed the now-unused `homeProblem` entry. `components/ui/EditorialImage.tsx`: removed the `fill` prop added in 9b for the (now-abandoned) layered photo composition — nothing used it after the rebuild.
+
+Build/typecheck/lint all pass (lint caught a `react-hooks/set-state-in-effect` issue in the new demo's reduced-motion branch, fixed by deferring through the existing timeout instead of a synchronous `setState`).
 
 ## Phase 9b — Redesign feedback pass (2026-07-18)
 

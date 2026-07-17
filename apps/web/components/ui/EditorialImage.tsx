@@ -11,8 +11,6 @@ interface EditorialImageProps {
   radius?: string
   className?: string
   style?: React.CSSProperties
-  /** When true, skips the aspect-ratio box and fills the parent (position: absolute, inset: 0) — use for layered/backdrop compositions where the parent controls sizing. */
-  fill?: boolean
 }
 
 // Shared art-direction wrapper for every real photo on the site — a rounded
@@ -29,18 +27,16 @@ export default function EditorialImage({
   radius = 'var(--radius-lg)',
   className,
   style,
-  fill = false,
 }: EditorialImageProps) {
   return (
     <div
       className={className}
       style={{
-        position: fill ? 'absolute' : 'relative',
-        inset: fill ? 0 : undefined,
-        aspectRatio: fill ? undefined : aspectRatio,
+        position: 'relative',
+        aspectRatio,
         borderRadius: radius,
         overflow: 'hidden',
-        boxShadow: fill ? undefined : '0 24px 60px -20px rgba(6,9,15,0.30), 0 4px 16px rgba(6,9,15,0.10)',
+        boxShadow: '0 24px 60px -20px rgba(6,9,15,0.30), 0 4px 16px rgba(6,9,15,0.10)',
         ...style,
       }}
     >
