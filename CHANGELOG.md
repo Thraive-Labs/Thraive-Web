@@ -4,6 +4,13 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9h (Hero content nudged back down slightly)
+
+### fix: hero content went too far up
+- 9g's `40px` top padding overcorrected. Bumped to `56px` — a middle point
+  between the original centered-and-too-low state and the flush-to-navbar
+  9g state. Verified at 1440x900 and mobile 390x844.
+
 ## 2026-07-18 — Phase 9g (Hero content raised further)
 
 ### fix: hero content still sitting too low
