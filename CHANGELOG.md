@@ -4,6 +4,12 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9i (Hero content nudged down again)
+
+### fix: still too close to the navbar
+- 9h's `56px` still read as too high. Bumped top padding to `70px`.
+  Verified at 1440x900 and mobile 390x844.
+
 ## 2026-07-18 — Phase 9h (Hero content nudged back down slightly)
 
 ### fix: hero content went too far up

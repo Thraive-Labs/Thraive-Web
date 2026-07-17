@@ -137,7 +137,7 @@ export default function HeroSection() {
           width: '100%',
           maxWidth: 1200,
           margin: '0 auto',
-          padding: '56px 24px 40px',
+          padding: '70px 24px 40px',
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 56,
