@@ -4,7 +4,17 @@
 
 ## Current State
 
-Marketing site redesigned to "Editorial Warmth" — see Phase 9, 9b, and 9c below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+Marketing site redesigned to "Editorial Warmth" — see Phase 9 through 9d below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+
+## Phase 9d — Hero: product-led not photo-led; images restored where asked (2026-07-18)
+
+Feedback: the full-bleed photo hero from 9c read as dated; the Problem section's photo-free demo-card rebuild also missed the mark — the right side specifically needed a photo back, and the site needed 1-2 more human photo moments overall.
+
+- **Hero rebuilt again**, this time confirmed against concrete reference directions before touching code: centered headline/subtext/CTA, then one large dominant product visual (`DashboardMockup` — a generalized dashboard preview, live Offline/Synced status cycling) below. No photography in the hero at all now — matches the Linear/Vercel/Apple pattern the user picked.
+- **Problem section**: photo restored on the right side, kept deliberately plain (default `EditorialImage` framing, no glass overlay/layering) — the earlier compositional cleverness was itself part of what wasn't landing.
+- **One more photo added**: `ValuesSection.tsx` now pairs its heading with a photo (cashier using a tablet POS), photo-left this time, alternating with the Problem section's photo-right for rhythm down the page.
+
+Lesson for future passes on this site: prefer plain, confident presentation (a well-framed photo, clean type, generous space) over compositional tricks (glass overlays, floating chips, rotation, layered depth) — the tricks were consistently what didn't land, not the underlying ideas.
 
 ## Phase 9c — Hero + Problem section rebuilt (2026-07-18)
 

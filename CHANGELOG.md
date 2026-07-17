@@ -4,6 +4,37 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9d (Hero: product-led, not photo-led; images restored where asked)
+
+Feedback: the full-bleed photo hero read as dated, and the Problem section's
+demo-card-only rebuild also missed — the right side specifically needed an
+image, and the site as a whole needed 1-2 more human photo moments.
+
+### feat: hero rebuilt again — product-dominant, no photography
+- Picked from a set of concrete reference directions: centered headline/subtext/CTA,
+  then one large dominant product visual below — same pattern as Linear/Vercel/Apple
+  marketing pages, not a lifestyle photo
+- New `DashboardMockup`: a generalized (not product-specific) dashboard preview
+  with a live sidebar, stat tiles, a small bar chart, and rows that reuse the
+  Offline/Synced status-pill pattern from the earlier power-cut demo, cycling
+  automatically
+- Removed the Ken Burns/full-bleed photo, the dark scrim, and the mouse-parallax
+  code entirely — none of it survived this pass
+
+### fix: Problem section — photo is back, kept simple this time
+- Reverted from the animated-demo-only version back to a photo, per direct
+  feedback ("the right side is the problem it needs a image")
+- Kept it deliberately plain this time: `EditorialImage` in its default framed
+  presentation, no glass overlay, no layered composition — the earlier attempts
+  at compositional cleverness were themselves part of what wasn't landing
+
+### feat: one more photo added for site-wide human warmth
+- `ValuesSection.tsx` now leads with a photo (a cashier using a tablet POS)
+  paired with the section heading, photo on the left this time — alternates
+  with the Problem section's photo-on-right for scroll rhythm
+- `lib/editorialImages.ts`: swapped the now-unused `homeHero` entry back to
+  `homeProblem`, added `valuesPhoto`
+
 ## 2026-07-18 — Phase 9c (Hero + Problem section rebuilt)
 
 Feedback: the split text/photo hero composition itself wasn't working, and the

@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import Container from '@/components/ui/Container'
 import SectionLabel from '@/components/ui/SectionLabel'
 import SeasonAccentWord from '@/components/home/SeasonAccentWord'
+import EditorialImage from '@/components/ui/EditorialImage'
+import { EDITORIAL_IMAGES } from '@/lib/editorialImages'
 
 const VALUES = [
   {
@@ -49,28 +51,52 @@ export default function ValuesSection() {
       style={{ padding: '96px 0' }}
     >
       <Container>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-          style={{ marginBottom: 64, textAlign: 'center' }}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '0.85fr 1.15fr',
+            gap: 56,
+            alignItems: 'center',
+            marginBottom: 72,
+          }}
+          className="grid-cols-1 lg:grid-cols-2"
         >
-          <SectionLabel>How we&rsquo;re different</SectionLabel>
-          <h2
-            id="values-heading"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(30px, 4.5vw, 48px)',
-              fontWeight: 400,
-              letterSpacing: '-0.01em',
-              lineHeight: 1.15,
-              color: 'var(--text-primary)',
-            }}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5 }}
           >
-            Built for how you actually <SeasonAccentWord>work.</SeasonAccentWord>
-          </h2>
-        </motion.div>
+            <EditorialImage
+              src={EDITORIAL_IMAGES.valuesPhoto.src}
+              alt={EDITORIAL_IMAGES.valuesPhoto.alt}
+              aspectRatio="4 / 5"
+              sizes="(max-width: 900px) 90vw, 460px"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <SectionLabel>How we&rsquo;re different</SectionLabel>
+            <h2
+              id="values-heading"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(30px, 4.5vw, 48px)',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+                lineHeight: 1.15,
+                color: 'var(--text-primary)',
+              }}
+            >
+              Built for how you actually <SeasonAccentWord>work.</SeasonAccentWord>
+            </h2>
+          </motion.div>
+        </div>
 
         <div
           style={{

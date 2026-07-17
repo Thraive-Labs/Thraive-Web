@@ -3,9 +3,9 @@
 // Centralized so real company photography can replace these one constant at a
 // time later with no component changes. Each entry names the intended slot.
 export const EDITORIAL_IMAGES = {
-  homeHero: {
-    src: 'https://images.unsplash.com/photo-1753791271758-42502f800d8f',
-    alt: 'Warm sunlight streaming into a small restaurant dining room',
+  homeProblem: {
+    src: 'https://images.unsplash.com/photo-1781883377959-cbccba3ba746',
+    alt: 'Two people working behind a busy, cluttered shop counter',
   },
   aboutHero: {
     src: 'https://images.unsplash.com/photo-1581420515590-cee76de451b5',
@@ -14,6 +14,10 @@ export const EDITORIAL_IMAGES = {
   productHeroBackdrop: {
     src: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853',
     alt: 'Laptop resting on a warm wooden desk',
+  },
+  valuesPhoto: {
+    src: 'https://images.unsplash.com/photo-1764795850004-92d8037b1d6e',
+    alt: 'A cashier using a tablet point-of-sale at a shop counter',
   },
   testimonials: [
     {
