@@ -4,6 +4,30 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9j (Hero: ambient motion + cycling word for real life)
+
+Feedback: the hero feels lifeless — images/layout fine, but everything
+animates in once on load and then sits static, and the left-column copy
+reads as generic feature-list text with no voice.
+
+### feat: primary hero photo breathes continuously
+- Restructured into a static outer frame (shadow, stays put) with a slow
+  inner scale animation (1 → 1.035 → 1 over 10s, ease-in-out, infinite) —
+  a near-imperceptible ambient zoom, not the earlier full Ken Burns pass.
+  Respects `prefers-reduced-motion` (no animation, static frame only).
+  Secondary overlapping photo stays static for hierarchy/contrast.
+
+### feat: cycling word replaces the generic subtext
+- New `CyclingWord` component: crossfades through "restaurants", "pharmacies",
+  "retail shops", "garages", "delivery teams" every 2.2s (`AnimatePresence`,
+  vertical slide, season-accent colored). Static under reduced motion (shows
+  first word, no interval).
+- Subtext rewritten around it: "Built for **[[cycling word]]** across Sri
+  Lanka. Offline-first, so a power cut is never a crisis." — replaces
+  "Offline-first business software for restaurants, pharmacies, and shops
+  across Sri Lanka. Built for this market." (generic, no voice) with
+  something with a specific, vivid claim and a continuously-alive detail.
+
 ## 2026-07-18 — Phase 9i (Hero content nudged down again)
 
 ### fix: still too close to the navbar

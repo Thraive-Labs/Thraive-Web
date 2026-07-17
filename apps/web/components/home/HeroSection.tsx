@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
 import { useLoading } from '@/contexts/loading-context'
 import SeasonAccentWord from './SeasonAccentWord'
@@ -15,6 +15,46 @@ const HEADLINE_WORDS = [
   { text: 'to', accent: false },
   { text: 'thraive.', accent: true },
 ]
+
+const CYCLE_WORDS = ['restaurants', 'pharmacies', 'retail shops', 'garages', 'delivery teams']
+
+// The one continuously-alive detail in the copy — cycles through the actual
+// business types Thraive builds for, instead of a static feature-list sentence.
+function CyclingWord() {
+  const [index, setIndex] = useState(0)
+  const prefersReduced = useReducedMotion()
+
+  useEffect(() => {
+    if (prefersReduced) return
+    const id = setInterval(() => setIndex((i) => (i + 1) % CYCLE_WORDS.length), 2200)
+    return () => clearInterval(id)
+  }, [prefersReduced])
+
+  return (
+    <span
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        overflow: 'hidden',
+        verticalAlign: 'bottom',
+        height: '1.3em',
+      }}
+    >
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={CYCLE_WORDS[index]}
+          initial={prefersReduced ? false : { y: 16, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={prefersReduced ? undefined : { y: -16, opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          style={{ display: 'inline-block', color: 'var(--season-accent)', fontWeight: 600 }}
+        >
+          {CYCLE_WORDS[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  )
+}
 
 function ScrollIndicator() {
   const [visible, setVisible] = useState(true)
@@ -61,6 +101,7 @@ function ScrollIndicator() {
 export default function HeroSection() {
   const { isLoaded } = useLoading()
   const [started, setStarted] = useState(false)
+  const prefersReduced = useReducedMotion()
 
   useEffect(() => {
     if (isLoaded) {
@@ -210,8 +251,8 @@ export default function HeroSection() {
                 margin: '0 0 28px',
               }}
             >
-              Offline-first business software for restaurants, pharmacies, and shops
-              across Sri Lanka. Built for this market.
+              Built for <CyclingWord /> across Sri Lanka. Offline-first, so a
+              power cut is never a crisis.
             </motion.p>
           )}
 
@@ -298,13 +339,31 @@ export default function HeroSection() {
             transition={{ duration: 0.6, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
             style={{ position: 'relative', height: 'min(52svh, 460px)', minHeight: 300 }}
           >
-            <EditorialImage
-              src={EDITORIAL_IMAGES.homeHero.src}
-              alt={EDITORIAL_IMAGES.homeHero.alt}
-              priority
-              sizes="(max-width: 900px) 90vw, 560px"
-              style={{ height: '100%', aspectRatio: 'auto' }}
-            />
+            {/* Static frame holds the shadow; the image breathes inside it
+                with a slow, near-imperceptible zoom — the one piece of
+                ambient motion once the entrance animation settles */}
+            <div
+              style={{
+                height: '100%',
+                borderRadius: 'var(--radius-lg)',
+                overflow: 'hidden',
+                boxShadow: '0 24px 60px -20px rgba(6,9,15,0.30), 0 4px 16px rgba(6,9,15,0.10)',
+              }}
+            >
+              <motion.div
+                animate={prefersReduced ? undefined : { scale: [1, 1.035, 1] }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ height: '100%' }}
+              >
+                <EditorialImage
+                  src={EDITORIAL_IMAGES.homeHero.src}
+                  alt={EDITORIAL_IMAGES.homeHero.alt}
+                  priority
+                  sizes="(max-width: 900px) 90vw, 560px"
+                  style={{ height: '100%', aspectRatio: 'auto', boxShadow: 'none' }}
+                />
+              </motion.div>
+            </div>
 
             {/* Second, smaller photo overlapping the primary's corner */}
             <motion.div
