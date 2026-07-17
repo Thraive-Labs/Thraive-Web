@@ -4,6 +4,28 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9f (Hero: overlapping photos, content raised, mobile image bug fixed)
+
+### feat: two overlapping photos in the hero
+- Added a second, smaller photo (`homeHeroSecondary`) overlapping the primary
+  photo's bottom-left corner in a bordered "print" frame with its own shadow —
+  a layered two-photo composition instead of one single frame
+- Reduced hero top/bottom padding (`104px 24px 56px` → `76px 24px 40px`) so
+  the content sits higher, less empty space above the fold
+
+### fix: hero/about photos rendered at zero width on mobile
+- Real bug, not a timing issue: `.hero-split-image { margin: 0 auto }` on a
+  grid item with no intrinsic content width (the photo inside is built from
+  `next/image fill`, which is `position: absolute` and contributes nothing to
+  shrink-to-fit sizing) collapsed the whole image to `width: 0` on mobile —
+  invisible, not just cropped
+- Fixes with one line (`width: 100%` added to `.hero-split-image` in the
+  mobile media query in `globals.css`) — also fixes `AboutHero.tsx`, which
+  shares the same class and had the identical latent bug, confirmed via a
+  before/after screenshot at 390x844
+- Verified image loads and renders correctly at 1440x900, 1440x800, 1280x720,
+  and mobile 390x844 (both the homepage hero and the About page hero)
+
 ## 2026-07-18 — Phase 9e (Hero: real photo back, first-paint cropping fixed)
 
 Feedback: still not right — wanted an actual photo (not a pure product mockup),

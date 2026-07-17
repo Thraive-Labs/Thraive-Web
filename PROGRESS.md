@@ -4,7 +4,12 @@
 
 ## Current State
 
-Marketing site redesigned to "Editorial Warmth" — see Phase 9 through 9e below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+Marketing site redesigned to "Editorial Warmth" — see Phase 9 through 9f below. All prior phases (1-8b) remain in place; the customer/admin portals were not touched.
+
+## Phase 9f — Overlapping hero photos, raised content, mobile image bug fixed (2026-07-18)
+
+- Hero now shows two overlapping photos (a second, smaller one framed and offset over the primary's bottom-left corner), and the content sits higher (padding tightened from `104px/56px` to `76px/40px` top/bottom).
+- **Real bug found and fixed**: `.hero-split-image { margin: 0 auto }` (globals.css, mobile media query) collapsed to `width: 0` on mobile whenever its content was purely `next/image fill` (absolutely positioned, no intrinsic width to shrink-to-fit around) — the hero photo and the About page hero photo (same shared class) were both **invisible on mobile**, not just cropped. One-line fix: `width: 100%` added alongside the existing `max-width`/`margin: 0 auto`. Confirmed both pages render correctly on mobile now.
 
 ## Phase 9e — Hero: real photo restored, first-paint cropping fixed (2026-07-18)
 

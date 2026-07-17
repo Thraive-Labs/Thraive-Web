@@ -137,7 +137,7 @@ export default function HeroSection() {
           width: '100%',
           maxWidth: 1200,
           margin: '0 auto',
-          padding: '104px 24px 56px',
+          padding: '76px 24px 40px',
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 56,
@@ -288,7 +288,7 @@ export default function HeroSection() {
           )}
         </div>
 
-        {/* Photo — height-capped so the pair always fits within the first
+        {/* Photos — height-capped so the pair always fits within the first
             viewport; never taller than what's actually visible on load */}
         {started && (
           <motion.div
@@ -296,7 +296,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-            style={{ height: 'min(58svh, 520px)', minHeight: 320 }}
+            style={{ position: 'relative', height: 'min(52svh, 460px)', minHeight: 300 }}
           >
             <EditorialImage
               src={EDITORIAL_IMAGES.homeHero.src}
@@ -305,6 +305,33 @@ export default function HeroSection() {
               sizes="(max-width: 900px) 90vw, 560px"
               style={{ height: '100%', aspectRatio: 'auto' }}
             />
+
+            {/* Second, smaller photo overlapping the primary's corner */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              style={{
+                position: 'absolute',
+                left: '-12%',
+                bottom: '-13%',
+                width: '48%',
+                zIndex: 2,
+                padding: 6,
+                background: 'var(--bg-card)',
+                borderRadius: 'var(--radius-lg)',
+                boxShadow: '0 24px 56px -18px rgba(6,9,15,0.4)',
+              }}
+            >
+              <EditorialImage
+                src={EDITORIAL_IMAGES.homeHeroSecondary.src}
+                alt={EDITORIAL_IMAGES.homeHeroSecondary.alt}
+                aspectRatio="4 / 5"
+                sizes="220px"
+                radius="var(--radius-md)"
+                style={{ boxShadow: 'none' }}
+              />
+            </motion.div>
           </motion.div>
         )}
       </div>

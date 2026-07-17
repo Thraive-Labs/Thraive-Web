@@ -202,7 +202,7 @@ body {
   .grid-3 { grid-template-columns: 1fr !important; }
   .grid-cols-1 { grid-template-columns: 1fr !important; }
   .hero-split { grid-template-columns: 1fr !important; text-align: center !important; }
-  .hero-split-image { max-width: 420px; margin: 0 auto; }
+  .hero-split-image { width: 100%; max-width: 420px; margin: 0 auto; }
 }
 @media (max-width: 900px) {
   .grid-steps { grid-template-columns: 1fr 1fr !important; }
