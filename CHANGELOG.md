@@ -4,6 +4,19 @@ Entries are newest-first.
 
 ---
 
+## 2026-07-18 — Phase 9k (Remove cycling word + grid background)
+
+Feedback: the cycling word wasn't good, remove it; the checker-pattern
+background wasn't good either.
+
+- Removed `CyclingWord` entirely. Subtext is now a plain static sentence:
+  "Built for restaurants, pharmacies, retail shops, and garages across Sri
+  Lanka. Offline-first, so a power cut is never a crisis." — keeps the more
+  specific, less generic copy from 9j, loses the animation.
+- Removed the grid-pattern background div entirely. Only the soft radial
+  glow remains behind the hero content.
+- The ambient photo-breathing motion (9j) was not called out and stays.
+
 ## 2026-07-18 — Phase 9j (Hero: ambient motion + cycling word for real life)
 
 Feedback: the hero feels lifeless — images/layout fine, but everything

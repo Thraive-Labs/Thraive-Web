@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
 import { useLoading } from '@/contexts/loading-context'
 import SeasonAccentWord from './SeasonAccentWord'
@@ -15,46 +15,6 @@ const HEADLINE_WORDS = [
   { text: 'to', accent: false },
   { text: 'thraive.', accent: true },
 ]
-
-const CYCLE_WORDS = ['restaurants', 'pharmacies', 'retail shops', 'garages', 'delivery teams']
-
-// The one continuously-alive detail in the copy — cycles through the actual
-// business types Thraive builds for, instead of a static feature-list sentence.
-function CyclingWord() {
-  const [index, setIndex] = useState(0)
-  const prefersReduced = useReducedMotion()
-
-  useEffect(() => {
-    if (prefersReduced) return
-    const id = setInterval(() => setIndex((i) => (i + 1) % CYCLE_WORDS.length), 2200)
-    return () => clearInterval(id)
-  }, [prefersReduced])
-
-  return (
-    <span
-      style={{
-        position: 'relative',
-        display: 'inline-block',
-        overflow: 'hidden',
-        verticalAlign: 'bottom',
-        height: '1.3em',
-      }}
-    >
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={CYCLE_WORDS[index]}
-          initial={prefersReduced ? false : { y: 16, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={prefersReduced ? undefined : { y: -16, opacity: 0 }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-          style={{ display: 'inline-block', color: 'var(--season-accent)', fontWeight: 600 }}
-        >
-          {CYCLE_WORDS[index]}
-        </motion.span>
-      </AnimatePresence>
-    </span>
-  )
-}
 
 function ScrollIndicator() {
   const [visible, setVisible] = useState(true)
@@ -138,21 +98,6 @@ export default function HeroSection() {
       }}
       aria-labelledby="hero-heading"
     >
-      {/* Faint grid + soft glow — restrained technical texture */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          backgroundImage:
-            'linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-          opacity: 0.5,
-          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 40%, transparent 100%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 40%, transparent 100%)',
-        }}
-      />
       {started && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -251,8 +196,8 @@ export default function HeroSection() {
                 margin: '0 0 28px',
               }}
             >
-              Built for <CyclingWord /> across Sri Lanka. Offline-first, so a
-              power cut is never a crisis.
+              Built for restaurants, pharmacies, retail shops, and garages across
+              Sri Lanka. Offline-first, so a power cut is never a crisis.
             </motion.p>
           )}
 
